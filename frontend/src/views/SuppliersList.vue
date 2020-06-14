@@ -38,7 +38,7 @@
                 </v-card>
             </v-dialog>
         </v-toolbar>
-        <SupplierCard v-for="supplier in suppliers" :key="supplier.id" :supplier="supplier" @edit="eventEdit" @delete="eventDelete">{{ supplier.name }}</SupplierCard>
+        <SupplierCard v-for="supplier in suppliers" :key="supplier.id" :supplier="supplier" @edit="eventEdit" @delete="eventDelete"></SupplierCard>
     </div>
 </template>
 
