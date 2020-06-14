@@ -34,7 +34,7 @@
                 this.$emit('edit', this.supplier)
             },
             clickedDelete() {
-                this.$emit('delete', this.supplier)
+                confirm('Are you sure you want to delete this supplier?') && this.$emit('delete', this.supplier)
             }
         }
     }

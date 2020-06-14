@@ -88,12 +88,11 @@
         },
         methods: {
             eventEdit(event) {
-                this.formTitle = 'Edit Supplier'
                 this.editSupplier = event
                 this.dialog = true
             },
             eventDelete(event) {
-                confirm('Are you sure you want to delete this item?') && SuppliersApi.deleteSupplier(event).then(response => { console.log(response)})
+                SuppliersApi.deleteSupplier(event).then(response => { console.log(response)})
             },
             eventSave() {
                 if (this.editSupplier.id === null) {
