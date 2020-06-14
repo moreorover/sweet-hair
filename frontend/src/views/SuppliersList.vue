@@ -24,21 +24,16 @@
                     </v-card-title>
 
                     <v-card-text>
-                        <v-container>
-                            <v-row>
-                                <v-col>
-                                    <v-text-field v-model="editSupplier.name" label="Supplier name"></v-text-field>
-                                    <v-text-field v-model="editSupplier.url" label="Supplier URL"></v-text-field>
-                                    <v-text-field v-model="editSupplier.logo" label="Supplier logo URL"></v-text-field>
-                                </v-col>
-                            </v-row>
-                        </v-container>
+                        <v-form ref="form" v-model="formValid">
+                            <v-text-field v-model="editSupplier.name" label="Supplier name" :rules="formRules.nameRules" required></v-text-field>
+                            <v-text-field v-model="editSupplier.url" label="Supplier URL" :rules="formRules.nameRules" required></v-text-field>
+                            <v-text-field v-model="editSupplier.logo" label="Supplier logo URL"></v-text-field>
+                        </v-form>
                     </v-card-text>
-
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                        <v-btn color="blue darken-1" text @click="eventSave">Save</v-btn>
+                        <v-btn color="blue darken-1" text @click="eventSave" :disabled="!formValid">Save</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -59,6 +54,7 @@
         data() {
           return {
               dialog: false,
+              formValid: false,
               suppliers: [],
               editSupplier: {
                   id: null,
@@ -70,6 +66,12 @@
                   name: '',
                   url: '',
                   logo: ''
+              },
+              formRules: {
+                  nameRules: [
+                      v => !!v || 'Name is required',
+                      v => (v && v.length >= 5) || 'Input must be greater than 5 characters',
+                  ]
               }
           }
         },
@@ -101,7 +103,6 @@
                             console.log(response)
                             this.close()
                         })
-                    this.close()
                     return
                 }
                 if (this.editSupplier.id > 0) {
@@ -111,7 +112,6 @@
                             console.log(response)
                             this.close()
                         })
-
                 }
             },
             close () {
