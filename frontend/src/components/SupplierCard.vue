@@ -1,7 +1,7 @@
 <template>
     <v-card class="mx-auto ma-3">
         <v-card-title>
-            {{ data.name }}
+            {{ supplier.name }}
         </v-card-title>
         <v-card-actions>
             <v-spacer></v-spacer>
@@ -11,7 +11,7 @@
             <v-btn icon @click="clickedEdit">
                 <v-icon>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn icon :href="data.url" target="_blank">
+            <v-btn icon :href="supplier.url" target="_blank">
                 <v-icon>mdi-open-in-new</v-icon>
             </v-btn>
         </v-card-actions>
@@ -20,9 +20,9 @@
 
 <script>
     export default {
-        name: "Row",
+        name: "SupplierCard",
         props: {
-            data: {
+            supplier: {
                 id: null,
                 name: "",
                 url: "",
@@ -31,10 +31,10 @@
         },
         methods: {
             clickedEdit() {
-                this.$emit('edit', this.data)
+                this.$emit('edit', this.supplier)
             },
             clickedDelete() {
-                this.$emit('delete', this.data)
+                this.$emit('delete', this.supplier)
             }
         }
     }
