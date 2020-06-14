@@ -29,6 +29,14 @@
             <v-list-item-title>Suppliers</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link to="/orders">
+          <v-list-item-action>
+            <v-icon></v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Orders</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
