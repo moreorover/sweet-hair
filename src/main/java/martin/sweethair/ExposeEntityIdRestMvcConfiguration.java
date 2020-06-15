@@ -1,7 +1,7 @@
 package martin.sweethair;
 
-import martin.sweethair.data.Product;
-import martin.sweethair.data.Supplier;
+import martin.sweethair.data.models.Product;
+import martin.sweethair.data.models.Supplier;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.stereotype.Component;

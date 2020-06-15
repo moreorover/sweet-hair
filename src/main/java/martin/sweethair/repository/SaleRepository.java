@@ -1,6 +1,6 @@
 package martin.sweethair.repository;
 
-import martin.sweethair.data.Sale;
+import martin.sweethair.data.models.Sale;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.web.bind.annotation.CrossOrigin;
