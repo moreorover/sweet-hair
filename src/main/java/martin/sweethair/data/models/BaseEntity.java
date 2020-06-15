@@ -1,4 +1,4 @@
-package martin.sweethair.data;
+package martin.sweethair.data.models;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

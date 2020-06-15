@@ -1,4 +1,4 @@
-package martin.sweethair.data;
+package martin.sweethair.data.models;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +16,6 @@ public class Supplier extends BaseEntity {
     private String url;
     private String logo;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
     private Set<Order> orders;
 }

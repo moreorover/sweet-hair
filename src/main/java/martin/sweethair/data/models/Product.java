@@ -1,4 +1,4 @@
-package martin.sweethair.data;
+package martin.sweethair.data.models;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +14,7 @@ public class Product extends BaseEntity {
 
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "order_items",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -22,7 +22,7 @@ public class Product extends BaseEntity {
     )
     private Set<Order> orders;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "sale_items",
             joinColumns = @JoinColumn(name = "product_id"),

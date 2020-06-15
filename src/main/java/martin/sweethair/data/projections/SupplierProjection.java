@@ -1,5 +1,6 @@
-package martin.sweethair.data;
+package martin.sweethair.data.projections;
 
+import martin.sweethair.data.models.Supplier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 

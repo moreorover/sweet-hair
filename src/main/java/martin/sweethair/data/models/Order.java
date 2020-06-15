@@ -1,10 +1,10 @@
-package martin.sweethair.data;
+package martin.sweethair.data.models;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -13,16 +13,16 @@ import java.util.Set;
 @Table(name = "orders")
 public class Order extends BaseEntity {
 
-    private LocalDateTime purchasedAt;
+    private LocalDate purchasedAt;
     private double total;
     private int itemsCount;
     private String currency;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "order_items",
             joinColumns = @JoinColumn(name = "order_id"),
