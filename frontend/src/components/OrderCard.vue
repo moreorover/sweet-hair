@@ -1,8 +1,14 @@
 <template>
     <v-card class="mx-auto ma-3">
-        <v-card-title>
-            {{ order }}
-        </v-card-title>
+        <v-list-item four-line>
+            <v-list-item-content>
+                <div class="overline mb-4">{{ order.purchasedAt }}</div>
+                <v-list-item-title class="headline mb-1">From: {{ order.supplierName }}</v-list-item-title>
+                <v-list-item-subtitle>Total: {{order.total}} {{ order.currency }}</v-list-item-subtitle>
+                <v-list-item-subtitle>Item count: {{ order.itemsCount }}</v-list-item-subtitle>
+            </v-list-item-content>
+        </v-list-item>
+
         <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn icon @click="clickedDelete">

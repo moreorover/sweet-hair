@@ -53,14 +53,15 @@
                                     :items="supplierNames"
                                     label="Supplier"
                                     @input="supplierSelected"
+                                    :rules="formRules.dateRule"
+                                    :value="editOrder.supplierName"
                             ></v-select>
                             <v-select
                                     :items="currencies"
                                     label="Currency"
                                     v-model="editOrder.currency"
+                                    :rules="formRules.dateRule"
                             ></v-select>
-<!--                            <v-text-field v-model="editSupplier.url" label="Supplier URL" :rules="formRules.nameRules" required></v-text-field>-->
-<!--                            <v-text-field v-model="editSupplier.logo" label="Supplier logo URL"></v-text-field>-->
                         </v-form>
                     </v-card-text>
                     <v-card-actions>
@@ -89,21 +90,23 @@
               formValid: false,
               orders: [],
               suppliers: [],
-              currencies: ['GBP £', 'EUR €', 'USD $'],
+              currencies: ['GBP', 'EUR', 'USD'],
               editOrder: {
                   id: null,
                   purchasedAt: new Date().toISOString().substr(0, 10),
                   supplier: null,
                   total: 0,
                   itemsCount: 0,
-                  currency: ''
+                  currency: '',
+                  supplierName: ''
               },
               defaultOrder: {
                   purchasedAt: new Date().toISOString().substr(0, 10),
                   supplier: null,
                   total: 0,
                   itemsCount: 0,
-                  currency: ''
+                  currency: '',
+                  supplierName: ''
               },
               formRules: {
                   dateRule: [
@@ -167,7 +170,8 @@
             },
             supplierSelected(event) {
                 const supplierObject = this.suppliers.find(supplier => supplier.name === event)
-                this.editOrder.supplier = "http://127.0.0.1:8080/api/suppliers/" + supplierObject.id
+                this.editOrder.supplier = "api/suppliers/" + supplierObject.id
+                this.editOrder.supplierName = supplierObject.name
             }
         }
     }
