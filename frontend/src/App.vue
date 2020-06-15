@@ -13,7 +13,7 @@
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link to="about">
           <v-list-item-action>
             <v-icon>mdi-email</v-icon>
           </v-list-item-action>
@@ -35,6 +35,14 @@
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Orders</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item link to="/products">
+          <v-list-item-action>
+            <v-icon></v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Products</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
