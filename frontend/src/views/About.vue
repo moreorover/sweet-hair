@@ -12,7 +12,7 @@
         <ProductsList/>
       </v-col>
       <v-col cols="12" md="4" xl="3">
-        4th column
+        <CustomersList/>
       </v-col>
     </v-row>
   </div>
@@ -21,11 +21,15 @@
   import OrdersList from "./OrdersList";
   import SuppliersList from "./SuppliersList";
   import ProductsList from "./ProductsList";
+  import CustomersList from "./CustomersList";
 
   export default {
     name: "About",
     components: {
-      OrdersList, ProductsList, SuppliersList
+      CustomersList,
+      OrdersList,
+      ProductsList,
+      SuppliersList
     }
   }
 </script>
