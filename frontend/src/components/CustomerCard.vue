@@ -26,10 +26,10 @@
         },
         methods: {
             clickedEdit() {
-                this.$emit('edit', this.supplier)
+                this.$emit('edit', this.customer)
             },
             clickedDelete() {
-                confirm('Are you sure you want to delete this customer?') && this.$emit('delete', this.supplier)
+                confirm('Are you sure you want to delete this customer?') && this.$emit('delete', this.customer)
             }
         }
     }
