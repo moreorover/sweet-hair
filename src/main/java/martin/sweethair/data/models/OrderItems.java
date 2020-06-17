@@ -9,19 +9,21 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "order_items")
-@IdClass(OrderItemsId.class)
 public class OrderItems {
 
-    @Id
+    @EmbeddedId
+    private OrderItemsId orderItem;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    @MapsId("orderId")
     private Order order;
 
-    @Id
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @MapsId("productId")
     private Product product;
 
     private int quantity;
     private double unitPrice;
+
+
 }

@@ -11,6 +11,7 @@
 
         <v-card-actions>
             <v-spacer></v-spacer>
+            <slot></slot>
             <v-btn icon @click="clickedDelete">
                 <v-icon color="red">mdi-delete</v-icon>
             </v-btn>

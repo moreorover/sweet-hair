@@ -72,7 +72,9 @@
                 </v-card>
             </v-dialog>
         </v-toolbar>
-        <OrderCard v-for="order in orders" :key="order.id" :order="order" @edit="eventEdit" @delete="eventDelete"></OrderCard>
+        <OrderCard v-for="order in orders" :key="order.id" :order="order" @edit="eventEdit" @delete="eventDelete">
+            <OrderItemsDialog/>
+        </OrderCard>
     </div>
 </template>
 
@@ -80,9 +82,10 @@
     import OrderCard from "../components/OrderCard";
     import OrdersApi from "../api/OrdersApi";
     import SuppliersApi from "../api/SuppliersApi";
+    import OrderItemsDialog from "../components/OrderItemsDialog";
     export default {
         name: "OrdersList",
-        components: { OrderCard },
+        components: {OrderItemsDialog, OrderCard },
         data() {
           return {
               dialog: false,

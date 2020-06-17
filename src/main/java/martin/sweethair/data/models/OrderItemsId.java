@@ -1,29 +1,27 @@
 package martin.sweethair.data.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
-import java.util.Objects;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
+@EqualsAndHashCode
+@Embeddable
 public class OrderItemsId implements Serializable {
 
-    private long order;
-    private long product;
+    @Column(name = "order_id")
+    private Long orderId;
+
+    @Column(name = "product_id")
+    private Long productId;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderItemsId that = (OrderItemsId) o;
-        return order == that.order &&
-                product == that.product;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(order, product);
+    public String toString() {
+        return String.format("%s_%s", getOrderId(), getProductId());
     }
 }

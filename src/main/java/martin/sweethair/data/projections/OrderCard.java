@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Projection(name = "OrderCard", types = { Order.class })
 public interface OrderCard {
@@ -19,4 +20,7 @@ public interface OrderCard {
 
     @Value("#{target.getSupplier().getName()}")
     String getSupplierName();
+
+    @Value("#{target.getProducts()}")
+    List<OrderItemsCard> getProducts();
 }
