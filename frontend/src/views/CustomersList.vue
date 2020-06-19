@@ -85,7 +85,7 @@
             eventDelete(event) {
                 NProgress.start()
                 CustomersApi.deleteCustomer(event).then(() => {
-                    this.customers = this.customers.filter(customer => customer.id === event.id);
+                    this.customers = this.customers.filter(customer => customer.id !== event.id);
                     NProgress.done()
                 })
             },

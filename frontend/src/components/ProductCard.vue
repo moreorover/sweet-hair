@@ -29,7 +29,7 @@
                 this.$emit('edit', this.product)
             },
             clickedDelete() {
-                confirm('Are you sure you want to delete this product?') && this.$emit('delete', this.supplier)
+                confirm('Are you sure you want to delete this product?') && this.$emit('delete', this.product)
             }
         }
     }

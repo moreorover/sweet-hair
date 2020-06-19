@@ -147,7 +147,7 @@
             eventDelete(event) {
                 NProgress.start()
                 OrdersApi.deleteOrder(event).then(() => {
-                    this.orders = this.orders.filter(order => order.id === event.id);
+                    this.orders = this.orders.filter(order => order.id !== event.id);
                     NProgress.done()
                 })
             },
@@ -165,7 +165,7 @@
                 if (this.editOrder.id > 0) {
                     OrdersApi.editOrder(this.editOrder)
                         .then(response => {
-                            const matchOrder = this.orders.find(order => order.id === response.data.id)
+                            const matchOrder = this.orders.find(order => order.id !== response.data.id)
                             const indexOrder = this.orders.findIndex(matchOrder);
                             this.orders[indexOrder] = response.data;
                             this.close()

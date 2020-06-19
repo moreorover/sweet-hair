@@ -86,7 +86,7 @@
             eventDelete(event) {
                 NProgress.start()
                 ProductsApi.deleteProduct(event).then(() => {
-                    this.products = this.products.filter(product => product.id === event.id);
+                    this.products = this.products.filter(product => product.id !== event.id);
                     NProgress.done()
                 })
             },
