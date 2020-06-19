@@ -41,21 +41,28 @@
 </template>
 
 <script>
+    import NProgress from 'nprogress';
     import ProductsApi from "../api/ProductsApi";
     import ProductCard from "../components/ProductCard";
     export default {
         name: "ProductsList",
         components: { ProductCard },
+        props: {
+            products: {
+                type: Array,
+                required: true
+            }
+        },
         data() {
           return {
               dialog: false,
               formValid: false,
-              products: [],
               editProduct: {
                   id: null,
                   name: ''
               },
               defaultProduct: {
+                  id: null,
                   name: ''
               },
               formRules: {
@@ -71,45 +78,62 @@
                 val || this.close()
             }
         },
-        created() {
-            ProductsApi.getProducts()
-            .then(suppliers => {
-                this.products = suppliers["_embedded"].products;
-            })
-        },
         methods: {
             eventEdit(event) {
                 this.editProduct = event
                 this.dialog = true
             },
             eventDelete(event) {
-                ProductsApi.deleteProduct(event).then(response => { console.log(response)})
+                NProgress.start()
+                ProductsApi.deleteProduct(event).then(() => {
+                    this.products = this.products.filter(product => product.id === event.id);
+                    NProgress.done()
+                })
             },
             eventSave() {
+                NProgress.start()
                 if (this.editProduct.id === null) {
-                    console.log("Saving new Supplier")
                     ProductsApi.newProduct(this.editProduct)
                         .then(response => {
-                            console.log(response)
+                            this.products.push(response.data)
                             this.close()
+                            NProgress.done()
                         })
                     return
                 }
                 if (this.editProduct.id > 0) {
-                    console.log("saving edited Supplier")
                     ProductsApi.editProduct(this.editProduct)
                         .then(response => {
-                            console.log(response)
+                            const matchProduct = this.products.find(product => product.id === response.data.id)
+                            const indexProduct = this.products.findIndex(matchProduct);
+                            this.products[indexProduct] = response.data;
                             this.close()
+                            NProgress.done()
                         })
                 }
             },
             close () {
                 this.dialog = false
-                this.$nextTick(() => {
-                    this.editProduct = Object.assign({}, this.defaultProduct)
-                })
+                this.formValid = false
+                this.editProduct = Object.assign({}, this.defaultProduct)
+                // this.$nextTick(() => {
+                //     this.editProduct = Object.assign({}, this.defaultProduct)
+                // })
             }
+        },
+        beforeRouteEnter(routeTo, routeFrom, next) {
+            ProductsApi.getProducts()
+                .then(products => {
+                    routeTo.params.products = products;
+                    next()
+                })
+        },
+        beforeRouteUpdate(routeTo, routeFrom, next) {
+            ProductsApi.getProducts()
+                .then(products => {
+                    routeTo.params.products = products;
+                    next()
+                })
         }
     }
 </script>

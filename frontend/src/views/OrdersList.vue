@@ -73,26 +73,36 @@
             </v-dialog>
         </v-toolbar>
         <OrderCard v-for="order in orders" :key="order.id" :order="order" @edit="eventEdit" @delete="eventDelete">
-            <OrderItemsDialog/>
+            <OrderItemsDialog :order="order" :key="order.id"/>
         </OrderCard>
     </div>
 </template>
 
 <script>
+    import axios from "axios";
     import OrderCard from "../components/OrderCard";
     import OrdersApi from "../api/OrdersApi";
     import SuppliersApi from "../api/SuppliersApi";
+    import NProgress from 'nprogress';
     import OrderItemsDialog from "../components/OrderItemsDialog";
     export default {
         name: "OrdersList",
         components: {OrderItemsDialog, OrderCard },
+        props: {
+            orders: {
+                type: Array,
+                required: true
+            },
+            suppliers: {
+                type: Array,
+                required: true
+            }
+        },
         data() {
           return {
               dialog: false,
               dateDialog: false,
               formValid: false,
-              orders: [],
-              suppliers: [],
               currencies: ['GBP', 'EUR', 'USD'],
               editOrder: {
                   id: null,
@@ -104,6 +114,7 @@
                   supplierName: ''
               },
               defaultOrder: {
+                  id: null,
                   purchasedAt: new Date().toISOString().substr(0, 10),
                   supplier: null,
                   total: 0,
@@ -123,16 +134,6 @@
                 val || this.close()
             }
         },
-        created() {
-            OrdersApi.getOrders()
-            .then(orders => {
-                this.orders = orders["_embedded"].orders;
-            })
-            SuppliersApi.getSuppliers()
-                .then(suppliers => {
-                    this.suppliers = suppliers["_embedded"].suppliers;
-                })
-        },
         computed: {
             supplierNames() {
                 return this.suppliers.map(supplier => supplier.name);
@@ -144,24 +145,31 @@
                 this.dialog = true
             },
             eventDelete(event) {
-                OrdersApi.deleteOrder(event).then(response => { console.log(response)})
+                NProgress.start()
+                OrdersApi.deleteOrder(event).then(() => {
+                    this.orders = this.orders.filter(order => order.id === event.id);
+                    NProgress.done()
+                })
             },
             eventSave() {
+                NProgress.start()
                 if (this.editOrder.id === null) {
-                    console.log("Saving new Order")
                     OrdersApi.newOrder(this.editOrder)
                         .then(response => {
-                            console.log(response)
+                            this.orders.push(response.data)
                             this.close()
+                            NProgress.done()
                         })
                     return
                 }
                 if (this.editOrder.id > 0) {
-                    console.log("saving edited Order")
                     OrdersApi.editOrder(this.editOrder)
                         .then(response => {
-                            console.log(response)
+                            const matchOrder = this.orders.find(order => order.id === response.data.id)
+                            const indexOrder = this.orders.findIndex(matchOrder);
+                            this.orders[indexOrder] = response.data;
                             this.close()
+                            NProgress.done()
                         })
                 }
             },
@@ -176,6 +184,22 @@
                 this.editOrder.supplier = "api/suppliers/" + supplierObject.id
                 this.editOrder.supplierName = supplierObject.name
             }
+        },
+        beforeRouteEnter(routeTo, routeFrom, next) {
+            axios.all([OrdersApi.getOrders(), SuppliersApi.getSuppliers()])
+                .then(axios.spread(function(orders, suppliers) {
+                    routeTo.params.orders = orders;
+                    routeTo.params.suppliers = suppliers;
+                    next()
+            }))
+        },
+        beforeRouteUpdate(routeTo, routeFrom, next) {
+            axios.all([OrdersApi.getOrders(), SuppliersApi.getSuppliers()])
+                .then(axios.spread(function(orders, suppliers) {
+                    routeTo.params.orders = orders;
+                    routeTo.params.suppliers = suppliers;
+                    next()
+                }))
         }
     }
 </script>

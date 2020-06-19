@@ -1,6 +1,8 @@
 package martin.sweethair.data.projections;
 
 import martin.sweethair.data.models.Order;
+import martin.sweethair.data.models.OrderItems;
+import martin.sweethair.data.models.Supplier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 
@@ -22,5 +24,5 @@ public interface OrderCard {
     String getSupplierName();
 
     @Value("#{target.getProducts()}")
-    List<OrderItemsCard> getProducts();
+    List<OrderItems> getProducts();
 }

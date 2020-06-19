@@ -14,11 +14,11 @@ public class OrderItems {
     @EmbeddedId
     private OrderItemsId orderItem;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("orderId")
     private Order order;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("productId")
     private Product product;
 

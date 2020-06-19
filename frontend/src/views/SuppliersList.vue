@@ -43,6 +43,7 @@
 </template>
 
 <script>
+    import NProgress from 'nprogress';
     import SuppliersApi from "../api/SuppliersApi";
     import SupplierCard from "../components/SupplierCard";
     export default {
@@ -51,11 +52,16 @@
         comments: {
             SupplierCard
         },
+        props: {
+            suppliers: {
+                type: Array,
+                required: false
+            }
+        },
         data() {
           return {
               dialog: false,
               formValid: false,
-              suppliers: [],
               editSupplier: {
                   id: null,
                   name: '',
@@ -63,6 +69,7 @@
                   logo: ''
               },
               defaultSuppler: {
+                  id: null,
                   name: '',
                   url: '',
                   logo: ''
@@ -80,36 +87,37 @@
                 val || this.close()
             }
         },
-        created() {
-            SuppliersApi.getSuppliers()
-            .then(suppliers => {
-                this.suppliers = suppliers["_embedded"].suppliers;
-            })
-        },
         methods: {
             eventEdit(event) {
                 this.editSupplier = event
                 this.dialog = true
             },
             eventDelete(event) {
-                SuppliersApi.deleteSupplier(event).then(response => { console.log(response)})
+                NProgress.start()
+                SuppliersApi.deleteSupplier(event)
+                    .then(() => {
+                        this.suppliers = this.suppliers.filter(supplier => supplier.id !== event.id)
+                        NProgress.done()
+                    })
             },
             eventSave() {
+                NProgress.start()
                 if (this.editSupplier.id === null) {
-                    console.log("Saving new Supplier")
                     SuppliersApi.newSupplier(this.editSupplier)
                         .then(response => {
-                            console.log(response)
+                            this.suppliers.push(response.data)
                             this.close()
+                            NProgress.done()
                         })
-                    return
                 }
                 if (this.editSupplier.id > 0) {
-                    console.log("saving edited Supplier")
                     SuppliersApi.editSupplier(this.editSupplier)
                         .then(response => {
-                            console.log(response)
+                            const matchSupplier = this.suppliers.find(supplier => supplier.id === response.data.id)
+                            const indexSupplier = this.suppliers.indexOf(matchSupplier);
+                            this.suppliers[indexSupplier] = response.data;
                             this.close()
+                            NProgress.done()
                         })
                 }
             },
@@ -119,6 +127,20 @@
                     this.editSupplier = Object.assign({}, this.defaultSuppler)
                 })
             }
+        },
+        beforeRouteEnter(routeTo, routeFrom, next) {
+            SuppliersApi.getSuppliers()
+                .then(suppliers => {
+                    routeTo.params.suppliers = suppliers;
+                    next()
+                })
+        },
+        beforeRouteUpdate(routeTo, routeFrom, next) {
+            SuppliersApi.getSuppliers()
+                .then(suppliers => {
+                    routeTo.params.suppliers = suppliers;
+                    next()
+                })
         }
     }
 </script>

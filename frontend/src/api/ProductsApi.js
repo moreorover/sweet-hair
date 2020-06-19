@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default {
     getProducts() {
-        return axios.get("products").then(resp => resp.data);
+        return axios.get("products").then(resp => resp.data["_embedded"].products);
     },
     newProduct(product) {
         return axios.post("products", product);

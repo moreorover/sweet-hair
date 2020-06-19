@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default {
     getSuppliers() {
-        return axios.get("suppliers").then(resp => resp.data);
+        return axios.get("suppliers").then(resp => resp.data["_embedded"].suppliers);
     },
     newSupplier(supplier) {
         return axios.post("suppliers", supplier);

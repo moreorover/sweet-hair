@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default {
     getOrders() {
-        return axios.get("orders").then(resp => resp.data);
+        return axios.get("orders").then(resp => resp.data["_embedded"].orders);
     },
     newOrder(order) {
         return axios.post("orders", order);

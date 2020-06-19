@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default {
     getCustomers() {
-        return axios.get("customers").then(resp => resp.data);
+        return axios.get("customers").then(resp => resp.data["_embedded"].customers);
     },
     newCustomer(customer) {
         return axios.post("customers", customer);

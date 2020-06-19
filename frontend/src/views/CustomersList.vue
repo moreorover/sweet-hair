@@ -43,14 +43,20 @@
 <script>
     import CustomerCard from "../components/CustomerCard";
     import CustomersApi from "../api/CustomersApi";
+    import NProgress from 'nprogress';
     export default {
         name: "CustomersList",
         components: { CustomerCard },
+        props: {
+            customers: {
+                type: Array,
+                required: true
+            }
+        },
         data() {
           return {
               dialog: false,
               formValid: false,
-              customers: [],
               editCustomer: {
                   id: null,
                   name: ''
@@ -71,36 +77,37 @@
                 val || this.close()
             }
         },
-        created() {
-            CustomersApi.getCustomers()
-            .then(customers => {
-                this.customers = customers["_embedded"].customers;
-            })
-        },
         methods: {
             eventEdit(event) {
                 this.editCustomer = event
                 this.dialog = true
             },
             eventDelete(event) {
-                CustomersApi.deleteCustomer(event).then(response => { console.log(response)})
+                NProgress.start()
+                CustomersApi.deleteCustomer(event).then(() => {
+                    this.customers = this.customers.filter(customer => customer.id === event.id);
+                    NProgress.done()
+                })
             },
             eventSave() {
+                NProgress.start()
                 if (this.editCustomer.id === null) {
-                    console.log("Saving new Supplier")
                     CustomersApi.newCustomer(this.editCustomer)
                         .then(response => {
-                            console.log(response)
+                            this.customers.push(response.data)
                             this.close()
+                            NProgress.done()
                         })
                     return
                 }
                 if (this.editCustomer.id > 0) {
-                    console.log("saving edited Supplier")
                     CustomersApi.editCustomer(this.editSupplier)
                         .then(response => {
-                            console.log(response)
+                            const matchProduct = this.customers.find(customer => customer.id === response.data.id)
+                            const indexProduct = this.customers.findIndex(matchProduct);
+                            this.customers[indexProduct] = response.data;
                             this.close()
+                            NProgress.done()
                         })
                 }
             },
@@ -110,6 +117,20 @@
                     this.editCustomer = Object.assign({}, this.defaultCustomer)
                 })
             }
+        },
+        beforeRouteEnter(routeTo, routeFrom, next) {
+            CustomersApi.getCustomers()
+                .then(customers => {
+                    routeTo.params.customers = customers;
+                    next()
+                })
+        },
+        beforeRouteUpdate(routeTo, routeFrom, next) {
+            CustomersApi.getCustomers()
+                .then(customers => {
+                    routeTo.params.customers = customers;
+                    next()
+                })
         }
     }
 </script>
