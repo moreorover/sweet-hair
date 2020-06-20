@@ -2,7 +2,6 @@ package martin.sweethair.converter;
 
 import martin.sweethair.data.models.OrderItems;
 import martin.sweethair.data.models.OrderItemsId;
-import martin.sweethair.repository.OrderItemsRepository;
 import org.springframework.data.rest.webmvc.spi.BackendIdConverter;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +9,6 @@ import java.io.Serializable;
 
 @Component
 public class OrderItemsIdConverter implements BackendIdConverter {
-
-    private OrderItemsRepository orderItemsRepository;
 
     @Override
     public Serializable fromRequestId(String s, Class<?> aClass) {
