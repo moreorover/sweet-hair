@@ -1,17 +1,21 @@
-package martin.sweethair.data.models;
+package martin.sweethair.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Getter
-@Setter
 @Table(name = "orders")
-public class Order extends BaseEntity {
+public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private LocalDate purchasedAt;
     private double total;
@@ -23,6 +27,6 @@ public class Order extends BaseEntity {
     private Supplier supplier;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<OrderItems> products;
+    private Set<OrderProducts> products;
 
 }

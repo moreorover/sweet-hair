@@ -1,17 +1,21 @@
-package martin.sweethair.data.models;
+package martin.sweethair.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Getter
-@Setter
 @Table(name = "sales")
-public class Sale extends BaseEntity{
+public class Sale {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private LocalDateTime soldAt;
     private double total;

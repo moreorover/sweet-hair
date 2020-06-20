@@ -1,4 +1,4 @@
-package martin.sweethair.data.models;
+package martin.sweethair.model;
 
 import lombok.Getter;
 import lombok.Setter;

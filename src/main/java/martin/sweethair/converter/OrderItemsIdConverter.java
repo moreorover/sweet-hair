@@ -1,7 +1,7 @@
 package martin.sweethair.converter;
 
-import martin.sweethair.data.models.OrderItems;
-import martin.sweethair.data.models.OrderItemsId;
+import martin.sweethair.model.OrderProducts;
+import martin.sweethair.model.OrderProductsId;
 import org.springframework.data.rest.webmvc.spi.BackendIdConverter;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ public class OrderItemsIdConverter implements BackendIdConverter {
 
         String[] parts = s.split("_", 2);
         if (parts != null && parts.length == 2) {
-            return new OrderItemsId(Long.parseLong(parts[0]), Long.parseLong(parts[1]));
+            return new OrderProductsId(Long.parseLong(parts[0]), Long.parseLong(parts[1]));
         } else {
             throw new IllegalArgumentException("Id must consist of two longs separated by '_'!");
         }
@@ -23,12 +23,12 @@ public class OrderItemsIdConverter implements BackendIdConverter {
 
     @Override
     public String toRequestId(Serializable serializable, Class<?> aClass) {
-        OrderItemsId id = (OrderItemsId) serializable;
+        OrderProductsId id = (OrderProductsId) serializable;
         return String.format("%s_%s", id.getOrderId(), id.getProductId());
     }
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return OrderItems.class.equals(aClass);
+        return OrderProducts.class.equals(aClass);
     }
 }

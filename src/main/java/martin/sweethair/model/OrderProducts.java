@@ -1,4 +1,4 @@
-package martin.sweethair.data.models;
+package martin.sweethair.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,16 +9,16 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name = "order_items")
-public class OrderItems {
+public class OrderProducts {
 
     @EmbeddedId
-    private OrderItemsId orderItem;
+    private OrderProductsId orderItem;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @MapsId("orderId")
     private Order order;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @MapsId("productId")
     private Product product;
 

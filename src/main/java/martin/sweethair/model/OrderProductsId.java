@@ -1,4 +1,4 @@
-package martin.sweethair.data.models;
+package martin.sweethair.model;
 
 import lombok.*;
 
@@ -8,11 +8,10 @@ import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode
 @Embeddable
-public class OrderItemsId implements Serializable {
+public class OrderProductsId implements Serializable {
 
     @Column(name = "order_id")
     private Long orderId;
