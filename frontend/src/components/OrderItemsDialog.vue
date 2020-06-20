@@ -114,7 +114,7 @@
             }
         },
         created() {
-            ProductsApi.getProducts().then(products => this.products = products["_embedded"].products)
+            ProductsApi.getProducts().then(products => this.products = products)
         },
         computed: {
             productNames() {
