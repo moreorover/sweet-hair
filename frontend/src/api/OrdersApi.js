@@ -13,5 +13,8 @@ export default {
     },
     deleteOrder(order) {
         return axios.delete("orders/" + order.id);
+    },
+    deleteOrderItem(payload) {
+        return axios.delete("orders/" + payload.orderItem.orderId + "/products/" + payload.orderItem.orderId + "_" + payload.orderItem.productId, payload)
     }
 }

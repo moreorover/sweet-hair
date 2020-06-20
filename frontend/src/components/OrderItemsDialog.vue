@@ -37,28 +37,33 @@
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="resetForm">Reset</v-btn>
-                        <v-btn text color="primary" @click="addItemToOrder">Add</v-btn>
+                        <v-btn text color="primary" @click="addItemToOrder">Submit</v-btn>
                     </v-card-actions>
                 </v-card>
-                <v-list-item three-line>
-                    <v-row>
-                        <v-col cols="12">
-                            <v-list-item-content v-for="product in order.products" :key="product.id">
-                                <v-list-item-title>{{fetchProductName(product.orderItem.productId)}}</v-list-item-title>
-                                <v-list-item-subtitle>Quantity: {{ product.quantity}} | Unit Price: {{ product.unitPrice}} {{order.currency}}</v-list-item-subtitle>
-                                <v-list-item-subtitle>
-                                    <v-spacer></v-spacer>
-                                    <v-btn icon >
-                                        <v-icon color="red" @click="clickedDelete(product)">mdi-delete</v-icon>
-                                    </v-btn>
-                                    <v-btn icon @click="clickedEdit(product)">
-                                        <v-icon>mdi-pencil</v-icon>
-                                    </v-btn>
-                                </v-list-item-subtitle>
-                            </v-list-item-content>
-                        </v-col>
-                    </v-row>
-                </v-list-item>
+                <v-list two-line subheader>
+                    <v-subheader inset>Order Items</v-subheader>
+
+                    <v-list-item
+                            v-for="product in order.products"
+                            :key="product.id"
+                    >
+                        <v-list-item-content>
+                            <v-list-item-title v-text="fetchProductName(product.orderItem.productId)"></v-list-item-title>
+                            <v-list-item-subtitle>Quantity: {{ product.quantity}} | Unit Price: {{ product.unitPrice}} {{order.currency}}</v-list-item-subtitle>
+                        </v-list-item-content>
+
+                        <v-list-item-action>
+                            <v-row>
+                                <v-btn icon >
+                                    <v-icon color="red" @click="clickedDelete(product)">mdi-delete</v-icon>
+                                </v-btn>
+                                <v-btn icon @click="clickedEdit(product)">
+                                    <v-icon>mdi-pencil</v-icon>
+                                </v-btn>
+                            </v-row>
+                        </v-list-item-action>
+                    </v-list-item>
+                </v-list>
             </v-card-text>
             <v-divider></v-divider>
 
@@ -77,6 +82,8 @@
 </template>
 
 <script>
+    import NProgress from "nprogress";
+    import OrdersApi from "../api/OrdersApi";
     import ProductsApi from "../api/ProductsApi";
     import OrderItemsApi from "../api/OrderItemsApi";
 
@@ -134,11 +141,25 @@
                 this.editOrderItems.product = '/api/products/' + this.products.find(p => p.name === event).id;
             },
             addItemToOrder() {
-                console.log(this.editOrderItems)
-                OrderItemsApi.newOrderItem(this.editOrderItems).then(result => {
-                    this.products.push(result.data)
-                    this.editOrderItems = Object.assign({}, this.defaultOrderItems);
-                })
+                NProgress.start()
+                const findMatch = this.order.products.find(product => product.orderItem.productId === this.editOrderItems.orderItem.productId);
+
+                if (findMatch) {
+                    // save edited item
+                    OrderItemsApi.editOrderItem(this.editOrderItems).then(response => {
+                        const matchProduct = this.order.products.find(product => product.orderItem.productId === response.data.orderItem.productId);
+                        const indexProduct = this.order.products.indexOf(matchProduct);
+                        this.editOrderItems = Object.assign({}, this.defaultOrderItems);
+                        this.order.products[indexProduct] = response.data;
+                        NProgress.done()
+                    })
+                } else {
+                    OrderItemsApi.newOrderItem(this.editOrderItems).then(result => {
+                        this.order.products.push(result.data)
+                        this.editOrderItems = Object.assign({}, this.defaultOrderItems);
+                        NProgress.done()
+                    })
+                }
             },
             fetchProductName(event) {
                 let p = this.products.find(p => p.id === event)
@@ -148,11 +169,15 @@
             },
             clickedDelete(event) {
                 console.log(event)
+                NProgress.start()
+                OrdersApi.deleteOrderItem(event).then(() => {
+                    this.order.products = this.order.products.filter(product => product.orderItem.productId !== event.orderItem.productId);
+                    NProgress.done()
+                })
             },
             clickedEdit(event) {
                 this.editOrderItems = Object.assign({}, event);
                 this.selectedProduct = this.fetchProductName(event.orderItem.productId);
-                console.log(this.selectedProduct)
             }
         }
     }
