@@ -9,7 +9,7 @@ export default {
         return axios.post("order_items", orderItem);
     },
     editOrderItem(editOrderItem) {
-        return axios.patch("order_items/" + editOrderItem.id, editOrderItem);
+        return axios.patch("order_items/" + editOrderItem.orderItem.orderId + "_" + editOrderItem.orderItem.productId, editOrderItem);
     },
     deleteOrderItem(orderItem) {
         return axios.delete("order_items/" + orderItem.id);
