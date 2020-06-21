@@ -3,6 +3,7 @@ package martin.sweethair.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -20,6 +21,6 @@ public class Supplier {
     private String url;
     private String logo;
 
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.EAGER)
-    private Set<Order> orders;
+    @OneToMany(mappedBy = "supplier")
+    private List<Order> orders;
 }

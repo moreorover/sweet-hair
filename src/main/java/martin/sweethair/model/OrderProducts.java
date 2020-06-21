@@ -1,13 +1,14 @@
 package martin.sweethair.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "order_items")
 public class OrderProducts {
 
@@ -25,5 +26,7 @@ public class OrderProducts {
     private int quantity;
     private double unitPrice;
 
-
+    public double getTotal() {
+        return quantity * unitPrice;
+    }
 }

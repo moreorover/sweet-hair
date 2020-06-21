@@ -2,7 +2,7 @@ package martin.sweethair.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import martin.sweethair.dto.ProductDto;
+import martin.sweethair.dto.base.ProductDtoBase;
 import martin.sweethair.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,30 +20,30 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
-        ProductDto savedProduct = productService.save(productDto);
+    public ResponseEntity<ProductDtoBase> createProduct(@RequestBody ProductDtoBase productDtoBase) {
+        ProductDtoBase savedProduct = productService.save(productDtoBase);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Set<ProductDto>> getAllProducts() {
-        Set<ProductDto> productDtos = productService.getAll();
+    public ResponseEntity<Set<ProductDtoBase>> getAllProducts() {
+        Set<ProductDtoBase> productDtos = productService.getAll();
         return new ResponseEntity<>(productDtos, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long id) {
-        ProductDto productDto = productService.getProductById(id);
-        return new ResponseEntity<>(productDto, HttpStatus.OK);
+    public ResponseEntity<ProductDtoBase> getProductById(@PathVariable("id") Long id) {
+        ProductDtoBase productDtoBase = productService.getProductById(id);
+        return new ResponseEntity<>(productDtoBase, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable("id") Long id, @RequestBody ProductDto productDto) {
-        if (!Objects.equals(id, productDto.getId())){
+    public ResponseEntity<ProductDtoBase> updateProduct(@PathVariable("id") Long id, @RequestBody ProductDtoBase productDtoBase) {
+        if (!Objects.equals(id, productDtoBase.getId())){
             // if different
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        ProductDto updatedProduct = productService.updateProduct(productDto);
+        ProductDtoBase updatedProduct = productService.updateProduct(productDtoBase);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 

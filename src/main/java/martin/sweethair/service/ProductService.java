@@ -2,7 +2,7 @@ package martin.sweethair.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import martin.sweethair.dto.ProductDto;
+import martin.sweethair.dto.base.ProductDtoBase;
 import martin.sweethair.exceptions.SpringDataException;
 import martin.sweethair.model.Product;
 import martin.sweethair.repository.ProductRepository;
@@ -23,33 +23,33 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public ProductDto save(ProductDto productDto) {
-        Product save = productRepository.save(modelMapper.map(productDto, Product.class));
-        productDto.setId(save.getId());
-        return productDto;
+    public ProductDtoBase save(ProductDtoBase productDtoBase) {
+        Product save = productRepository.save(modelMapper.map(productDtoBase, Product.class));
+        productDtoBase.setId(save.getId());
+        return productDtoBase;
     }
 
     @Transactional(readOnly = true)
-    public Set<ProductDto> getAll() {
+    public Set<ProductDtoBase> getAll() {
         return productRepository.findAll()
                 .stream()
-                .map(product -> modelMapper.map(product, ProductDto.class))
+                .map(product -> modelMapper.map(product, ProductDtoBase.class))
                 .collect(Collectors.toSet());
     }
 
-    public ProductDto getProductById(Long id) {
+    public ProductDtoBase getProductById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new SpringDataException("No product found with ID -> " + id));
-        return modelMapper.map(product, ProductDto.class);
+        return modelMapper.map(product, ProductDtoBase.class);
     }
 
-    public ProductDto updateProduct(ProductDto productDto) {
-        Product product = productRepository.findById(productDto.getId())
-                .orElseThrow(() -> new SpringDataException("No product found with ID -> " + productDto.getId()));;
+    public ProductDtoBase updateProduct(ProductDtoBase productDtoBase) {
+        Product product = productRepository.findById(productDtoBase.getId())
+                .orElseThrow(() -> new SpringDataException("No product found with ID -> " + productDtoBase.getId()));
 
-        product.setName(productDto.getName());
+        product.setName(productDtoBase.getName());
         productRepository.save(product);
-        return modelMapper.map(product, ProductDto.class);
+        return modelMapper.map(product, ProductDtoBase.class);
     }
 
     public void deleteProductById(Long id) {

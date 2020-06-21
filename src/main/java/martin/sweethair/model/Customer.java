@@ -3,6 +3,7 @@ package martin.sweethair.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -19,5 +20,5 @@ public class Customer {
     private String name;
 
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    private Set<Sale> sales;
+    private List<Sale> sales;
 }
