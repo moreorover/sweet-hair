@@ -3,7 +3,7 @@ package martin.sweethair.model;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -17,14 +17,15 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime soldAt;
+    private LocalDate soldAt;
     private double total;
     private int itemsCount;
+    private String currency;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @OneToMany(mappedBy = "sale", fetch = FetchType.EAGER)
-    private List<SaleItems> products;
+    @OneToMany(mappedBy = "sale")
+    private List<SaleProducts> products;
 }

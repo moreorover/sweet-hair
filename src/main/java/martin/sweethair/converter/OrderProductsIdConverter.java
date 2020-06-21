@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 
 @Component
-public class OrderItemsIdConverter implements BackendIdConverter {
+public class OrderProductsIdConverter implements BackendIdConverter {
 
     @Override
     public Serializable fromRequestId(String s, Class<?> aClass) {

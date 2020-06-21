@@ -22,5 +22,5 @@ public class Product {
     private List<OrderProducts> orders;
 
     @OneToMany(mappedBy = "sale", fetch = FetchType.LAZY)
-    private List<SaleItems> sales;
+    private List<SaleProducts> sales;
 }

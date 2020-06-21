@@ -28,7 +28,7 @@ public class Order {
     @JoinColumn(name = "supplier_id", nullable = false)
     private Supplier supplier;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order")
     private List<OrderProducts> products;
 
 }

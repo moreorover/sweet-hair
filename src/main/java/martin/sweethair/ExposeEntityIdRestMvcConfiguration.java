@@ -15,7 +15,7 @@ public class ExposeEntityIdRestMvcConfiguration implements RepositoryRestConfigu
         restConfig.exposeIdsFor(OrderProducts.class);
         restConfig.exposeIdsFor(Product.class);
         restConfig.exposeIdsFor(Sale.class);
-        restConfig.exposeIdsFor(SaleItems.class);
+        restConfig.exposeIdsFor(SaleProducts.class);
         restConfig.exposeIdsFor(Supplier.class);
     }
 }
