@@ -41,8 +41,8 @@
 </template>
 
 <script>
-    import CustomerCard from "../components/CustomerCard";
-    import CustomersApi from "../api/CustomersApi";
+    import CustomerCard from "../../components/CustomerCard";
+    import CustomersApi from "../../api/CustomersApi";
     import NProgress from 'nprogress';
     export default {
         name: "CustomersList",
@@ -84,7 +84,7 @@
             },
             eventDelete(event) {
                 NProgress.start()
-                CustomersApi.deleteCustomer(event).then(() => {
+                CustomersApi.delete(event).then(() => {
                     this.customers = this.customers.filter(customer => customer.id !== event.id);
                     NProgress.done()
                 })
@@ -92,7 +92,7 @@
             eventSave() {
                 NProgress.start()
                 if (this.editCustomer.id === null) {
-                    CustomersApi.newCustomer(this.editCustomer)
+                    CustomersApi.create(this.editCustomer)
                         .then(response => {
                             this.customers.push(response.data)
                             this.close()
@@ -117,20 +117,6 @@
                     this.editCustomer = Object.assign({}, this.defaultCustomer)
                 })
             }
-        },
-        beforeRouteEnter(routeTo, routeFrom, next) {
-            CustomersApi.getCustomers()
-                .then(customers => {
-                    routeTo.params.customers = customers;
-                    next()
-                })
-        },
-        beforeRouteUpdate(routeTo, routeFrom, next) {
-            CustomersApi.getCustomers()
-                .then(customers => {
-                    routeTo.params.customers = customers;
-                    next()
-                })
         }
     }
 </script>
