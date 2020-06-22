@@ -8,14 +8,16 @@
             <v-btn icon @click="clickedDelete">
                 <v-icon color="red">mdi-delete</v-icon>
             </v-btn>
-            <v-btn icon @click="clickedEdit">
-                <v-icon>mdi-pencil</v-icon>
-            </v-btn>
+                <v-btn icon link :to="{ name: 'Edit Customer', params: { id: customer.id } }">
+                    <v-icon>mdi-pencil</v-icon>
+                </v-btn>
         </v-card-actions>
     </v-card>
 </template>
 
 <script>
+    import CustomersApi from "../api/CustomersApi";
+
     export default {
         name: "CustomerCard",
         props: {
@@ -25,11 +27,14 @@
             }
         },
         methods: {
-            clickedEdit() {
-                this.$emit('edit', this.customer)
-            },
             clickedDelete() {
-                confirm('Are you sure you want to delete this customer?') && this.$emit('delete', this.customer)
+                confirm('Are you sure you want to delete this customer?') &&
+                CustomersApi
+                    .delete(this.customer)
+                    .then(() => {
+                        this.$emit('deleted', this.customer);
+                    })
+                    .catch(error => { console.log(error)})
             }
         }
     }

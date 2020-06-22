@@ -3,7 +3,7 @@ import CustomersApi from "../api/CustomersApi";
 export default [
     {
         path: '/customers',
-        name: 'Customer',
+        name: 'Customers',
         component: () => import(/* webpackChunkName: "about" */ '../views/customer/CustomersList'),
         props: true,
         beforeEnter(routeTo, routeFrom, next) {
@@ -26,7 +26,7 @@ export default [
     {
         path: '/customers/create',
         name: 'Create Customer',
-        // component: () => import(/* webpackChunkName: "about" */ '../views/CustomerDetails'),
+        component: () => import(/* webpackChunkName: "about" */ '../views/customer/CustomerForm'),
         props: false
     },
     {
@@ -54,7 +54,7 @@ export default [
     {
         path: '/customer/:id/edit',
         name: 'Edit Customer',
-        // component: () => import(/* webpackChunkName: "about" */ '../views/CustomerDetails'),
+        component: () => import(/* webpackChunkName: "about" */ '../views/customer/CustomerForm'),
         props: true,
         beforeEnter(routeTo, routeFrom, next) {
             CustomersApi
