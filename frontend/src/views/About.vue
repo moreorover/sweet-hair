@@ -21,7 +21,7 @@
   import OrdersList from "./OrdersList";
   import SuppliersList from "./SuppliersList";
   import ProductsList from "./ProductsList";
-  import CustomersList from "./CustomersList";
+  import CustomersList from "./customer/CustomersList";
 
   export default {
     name: "About",
