@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 import java.util.Set;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/sale")
 @AllArgsConstructor
