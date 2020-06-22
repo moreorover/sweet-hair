@@ -49,11 +49,15 @@ public class CustomerService {
 
     @Transactional
     public CustomerDtoBase updateCustomer(CustomerDtoBase customerDtoBase) {
-        Customer supplier = customerRepository.findById(customerDtoBase.getId())
-                .orElseThrow(() -> new SpringDataException("No supplier found with ID -> " + customerDtoBase.getId()));
-        supplier.setName(customerDtoBase.getName());
-        customerRepository.save(supplier);
-        return modelMapper.map(supplier, CustomerDtoBase.class);
+        if( customerDtoBase.getId() > 0L) {
+            Customer customer = modelMapper.map(customerDtoBase, Customer.class);
+
+            customerRepository.save(customer);
+            return modelMapper.map(customer, CustomerDtoBase.class);
+        } else {
+            throw new SpringDataException("No payload must contain valid ID.");
+        }
+
     }
 
     public void deleteCustomerById(Long id) {
