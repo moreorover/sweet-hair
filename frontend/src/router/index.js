@@ -2,10 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import NProgress from 'nprogress'
+import customerRoutes from "./customerRoutes";
 
 Vue.use(VueRouter)
 
-  const routes = [
+  const baseRoutes = [
   {
     path: '/',
     name: 'Home',
@@ -45,17 +46,10 @@ Vue.use(VueRouter)
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/ProductsList'),
     props: true
-  },
-  {
-    path: '/customers',
-    name: 'Customers',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/CustomersList'),
-    props: true
   }
 ]
+
+const routes = baseRoutes.concat(customerRoutes)
 
 const router = new VueRouter({
   mode: 'history',
