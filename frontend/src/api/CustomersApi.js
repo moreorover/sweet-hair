@@ -2,16 +2,19 @@ import axios from "axios";
 
 
 export default {
-    getCustomers() {
-        return axios.get("customers").then(resp => resp.data["_embedded"].customers);
+    getAll() {
+        return axios.get("customer").then(response => response.data);
     },
-    newCustomer(customer) {
-        return axios.post("customers", customer);
+    getById(id) {
+        return axios.get("customer/" + id).then(response => response.data);
     },
-    editCustomer(editCustomer) {
-        return axios.patch("customers/" + editCustomer.id, editCustomer);
+    create(payload) {
+        return axios.post("customer", payload).then(response => response.data);
     },
-    deleteCustomer(customer) {
-        return axios.delete("customers/" + customer.id);
+    update(payload) {
+        return axios.patch("customer/" + payload.id, payload).then(response => response.data);
+    },
+    delete(payload) {
+        return axios.delete("customer/" + payload.id);
     }
 }
