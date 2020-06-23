@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import NProgress from 'nprogress'
 import customerRoutes from "./customerRoutes";
+import supplierRoutes from "./supplierRoutes";
 
 Vue.use(VueRouter)
 
@@ -19,15 +20,6 @@ Vue.use(VueRouter)
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
-  {
-    path: '/suppliers',
-    name: 'Suppliers',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/SuppliersList'),
-    props: true
   },
   {
     path: '/orders',
@@ -49,7 +41,7 @@ Vue.use(VueRouter)
   }
 ]
 
-const routes = baseRoutes.concat(customerRoutes)
+const routes = baseRoutes.concat(customerRoutes, supplierRoutes)
 
 const router = new VueRouter({
   mode: 'history',
