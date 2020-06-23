@@ -1,5 +1,5 @@
 <template>
-    <CustomerCard :customer="customer" :key="customer.id"></CustomerCard>
+    <CustomerCard :customer="customer" :key="customer.id" @deleted="deleted"></CustomerCard>
 </template>
 
 <script>
@@ -11,6 +11,13 @@
             customer: {
                 type: Object,
                 required: true
+            }
+        },
+        methods: {
+            deleted() {
+                this.$router.push({
+                    name: "Customers"
+                })
             }
         }
     }
