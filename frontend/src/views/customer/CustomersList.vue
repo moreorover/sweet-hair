@@ -37,7 +37,7 @@
         },
         computed: {
             customersSorted() {
-                return this.customers.slice().sort()
+                return _.orderBy(this.customers, 'name')
             }
         }
     }

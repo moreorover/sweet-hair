@@ -1,5 +1,22 @@
 <template>
-    <v-card>
+    <div>
+    <v-toolbar>
+        <v-toolbar-title>Customers</v-toolbar-title>
+        <v-divider
+                class="mx-4"
+                inset
+                vertical
+        ></v-divider>
+        <v-spacer></v-spacer>
+        <v-btn
+                color="primary"
+                dark
+                class="mx-4"
+                link :to="{ name: 'Customers' }"
+        >List Customers</v-btn>
+    </v-toolbar>
+
+    <v-card class="mx-auto ma-3">
         <v-card-title>
             <span class="headline">{{ title }}</span>
         </v-card-title>
@@ -14,6 +31,7 @@
             <v-btn color="blue darken-1" text @click="save" :disabled="!formValid || formInputsChanged">Save</v-btn>
         </v-card-actions>
     </v-card>
+    </div>
 </template>
 
 <script>
