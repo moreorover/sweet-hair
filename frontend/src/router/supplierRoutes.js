@@ -25,7 +25,7 @@ export default [
     },
     {
         path: '/suppliers/create',
-        name: 'Supplier Customer',
+        name: 'Create Supplier',
         component: () => import(/* webpackChunkName: "about" */ '../views/supplier/SupplierForm'),
         props: false
     },
