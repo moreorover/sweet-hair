@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import NProgress from 'nprogress'
 import customerRoutes from "./customerRoutes";
 import supplierRoutes from "./supplierRoutes";
+import productRoutes from "./productRoutes";
 
 Vue.use(VueRouter)
 
@@ -32,7 +33,7 @@ Vue.use(VueRouter)
   }
 ]
 
-const routes = baseRoutes.concat(customerRoutes, supplierRoutes)
+const routes = baseRoutes.concat(customerRoutes, supplierRoutes, productRoutes)
 
 const router = new VueRouter({
   mode: 'history',

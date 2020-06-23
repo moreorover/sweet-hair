@@ -4,7 +4,7 @@ export default [
     {
         path: '/products',
         name: 'Products',
-        component: () => import(/* webpackChunkName: "about" */ '../views/product/ProdudctsList'),
+        component: () => import(/* webpackChunkName: "about" */ '../views/product/ProductsList'),
         props: true,
         beforeEnter(routeTo, routeFrom, next) {
             ProductsApi
@@ -24,7 +24,7 @@ export default [
         }
     },
     {
-        path: '/suppliers/create',
+        path: '/products/create',
         name: 'Create Product',
         component: () => import(/* webpackChunkName: "about" */ '../views/product/ProductForm'),
         props: false
