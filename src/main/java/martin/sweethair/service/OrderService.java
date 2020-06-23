@@ -6,17 +6,17 @@ import martin.sweethair.dto.base.OrderDtoBase;
 import martin.sweethair.dto.base.OrderProductDtoBase;
 import martin.sweethair.dto.full.OrderDtoFull;
 import martin.sweethair.exceptions.SpringDataException;
-import martin.sweethair.model.Order;
-import martin.sweethair.model.OrderProducts;
-import martin.sweethair.model.OrderProductsId;
-import martin.sweethair.model.Product;
+import martin.sweethair.model.*;
 import martin.sweethair.repository.OrderProductsRepository;
 import martin.sweethair.repository.OrderRepository;
 import martin.sweethair.repository.ProductRepository;
+import martin.sweethair.repository.SupplierRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,12 +30,41 @@ public class OrderService {
     private final OrderProductsRepository orderProductsRepository;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final SupplierRepository supplierRepository;
 
     @Transactional
-    public OrderDtoBase save(OrderDtoBase orderDtoBase) {
-        Order save = orderRepository.save(modelMapper.map(orderDtoBase, Order.class));
-        orderDtoBase.setId(save.getId());
-        return orderDtoBase;
+    public OrderDtoFull save(OrderDtoFull orderDtoFull) {
+//        Supplier supplier = supplierRepository.findById(orderDtoFull.getSupplier().getId())
+//                .orElseThrow(() -> new SpringDataException("No supplier found with ID -> " + orderDtoFull.getSupplier().getId()));
+//
+//        Order newOrder = Order.builder()
+//                .supplier(supplier)
+//                .total(orderDtoFull.getTotal())
+//                .itemsCount(orderDtoFull.getItemsCount())
+//                .currency(orderDtoFull.getCurrency())
+//                .purchasedAt(orderDtoFull.getPurchasedAt())
+//                .build();
+//        orderRepository.save(modelMapper.map(orderDtoFull, Order.class));
+//
+//        List<Product> products = orderDtoFull
+//                .getProducts()
+//                .stream()
+//                .map(product -> productRepository.findById(product.getProduct().getId())
+//                        .orElseThrow(() -> new SpringDataException("No product found with ID -> " + product.getProduct().getId())))
+//                .collect(Collectors.toList());
+//
+//        List<OrderProducts> orderProducts = new ArrayList<>();
+//
+//        products.forEach(product -> {
+//            OrderProducts orderProduct = OrderProducts.builder()
+//                    .orderItem(new OrderProductsId(newOrder.getId(), product.getId()))
+//                    .order(newOrder)
+//                    .product(product)
+//                    .quantity(product)
+//        });
+//
+//        orderDtoFull.setId(newOrder.getId());
+        return orderDtoFull;
     }
 
     @Transactional(readOnly = true)

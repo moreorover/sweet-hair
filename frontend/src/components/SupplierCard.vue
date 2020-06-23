@@ -3,7 +3,7 @@
         <v-card-title>
             {{ supplier.name }}
             <v-btn icon :href="supplier.url" target="_blank">
-                <v-icon>mdi-earth</v-icon>
+                <v-icon>mdi-open-in-new</v-icon>
             </v-btn>
         </v-card-title>
         <v-card-actions>

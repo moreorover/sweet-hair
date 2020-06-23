@@ -23,8 +23,8 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<OrderDtoBase> createOrder(@RequestBody OrderDtoBase orderDtoBase) {
-        OrderDtoBase savedOrder = orderService.save(orderDtoBase);
+    public ResponseEntity<OrderDtoFull> createOrder(@RequestBody OrderDtoFull orderDtoFull) {
+        OrderDtoFull savedOrder = orderService.save(orderDtoFull);
         return new ResponseEntity<>(savedOrder, HttpStatus.CREATED);
     }
 
