@@ -20,6 +20,7 @@
 </template>
 
 <script>
+    import _ from 'lodash';
     import CustomerCard from "../../components/CustomerCard";
     export default {
         name: "CustomersList",
