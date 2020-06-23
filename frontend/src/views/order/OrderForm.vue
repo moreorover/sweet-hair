@@ -92,8 +92,8 @@
 
 <script>
     import _ from 'lodash';
-    // import OrdersApi from "../../api/OrdersApi";
-    // import NProgress from "nprogress";
+    import OrdersApi from "../../api/OrdersApi";
+    import NProgress from "nprogress";
 
     export default {
         name: "OrderForm",
@@ -208,33 +208,33 @@
         },
         methods: {
             save() {
-                console.log(this.localOrder)
-                // NProgress.start()
-                // if (this.localOrder.id){
-                //     OrdersApi
-                //         .update(this.localOrder)
-                //         .then(result => {
-                //             this.$router.push({
-                //                 name: "Order Details",
-                //                 params: {id: result.id}
-                //             })
-                //         })
-                //         .catch(() => {
-                //             NProgress.done()
-                //         })
-                // } else {
-                //     OrdersApi
-                //         .create(this.localOrder)
-                //         .then(result => {
-                //             this.$router.push({
-                //                 name: "Order Details",
-                //                 params: { id: result.id }
-                //             })
-                //         })
-                //         .catch(() => {
-                //             NProgress.done()
-                //         })
-                // }
+                NProgress.start()
+                if (this.localOrder.id){
+                    OrdersApi
+                        .update(this.localOrder)
+                        .then(result => {
+                            this.$router.push({
+                                name: "Order Details",
+                                params: {id: result.id}
+                            })
+                        })
+                        .catch(() => {
+                            NProgress.done()
+                        })
+                } else {
+                    OrdersApi
+                        .create(this.localOrder)
+                        .then(result => {
+                            this.$router.push({
+                                name: "Order Details",
+                                params: { id: result.id }
+                            })
+                        })
+                        .catch(error => {
+                            console.log(error)
+                            NProgress.done()
+                        })
+                }
             },
             addProduct() {
                 this.localOrder.products.push({ ...this.defaultProduct })

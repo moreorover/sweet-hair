@@ -4,7 +4,7 @@
             <v-list-item-content>
                 <div class="overline mb-4">{{ order.purchasedAt }}</div>
                 <v-list-item-title class="headline mb-1">From: {{ order.supplier.name }}</v-list-item-title>
-                <v-list-item-subtitle>Total: {{order.total}} {{ order.currency }}</v-list-item-subtitle>
+                <v-list-item-subtitle>Total: {{order.total | twoDecimal}} {{ order.currency }}</v-list-item-subtitle>
                 <v-list-item-subtitle>Item count: {{ order.itemsCount }}</v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import _ from "lodash"
     import OrderApi from "../api/OrdersApi";
 
     export default {
@@ -35,7 +36,7 @@
                 itemsCount: 0,
                 currency: '',
                 supplier: {
-                    id: 1,
+                    id: null,
                     name: '',
                     url: '',
                     logo: ''
@@ -52,6 +53,11 @@
                         this.$emit('deleted', this.order);
                     })
                     .catch(error => { console.log(error)})
+            }
+        },
+        filters: {
+            twoDecimal(value) {
+                return _.round(value, 2)
             }
         }
     }

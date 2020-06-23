@@ -1,14 +1,14 @@
 <template>
-    <SupplierCard :supplier="supplier" :key="supplier.id" @deleted="deleted"></SupplierCard>
+    <OrderCard :order="order" :key="order.id" @deleted="deleted"></OrderCard>
 </template>
 
 <script>
-    import SupplierCard from "../../components/SupplierCard";
+    import OrderCard from "../../components/OrderCard";
     export default {
-        name: "SupplierDetails",
-        components: { SupplierCard },
+        name: "OrderDetails",
+        components: { OrderCard },
         props: {
-            supplier: {
+            order: {
                 type: Object,
                 required: true
             }
@@ -16,7 +16,7 @@
         methods: {
             deleted() {
                 this.$router.push({
-                    name: "Suppliers"
+                    name: "Orders"
                 })
             }
         }

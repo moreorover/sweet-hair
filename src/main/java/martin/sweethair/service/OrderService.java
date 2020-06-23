@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,36 +36,47 @@ public class OrderService {
 
     @Transactional
     public OrderDtoFull save(OrderDtoFull orderDtoFull) {
-//        Supplier supplier = supplierRepository.findById(orderDtoFull.getSupplier().getId())
-//                .orElseThrow(() -> new SpringDataException("No supplier found with ID -> " + orderDtoFull.getSupplier().getId()));
-//
-//        Order newOrder = Order.builder()
-//                .supplier(supplier)
-//                .total(orderDtoFull.getTotal())
-//                .itemsCount(orderDtoFull.getItemsCount())
-//                .currency(orderDtoFull.getCurrency())
-//                .purchasedAt(orderDtoFull.getPurchasedAt())
-//                .build();
-//        orderRepository.save(modelMapper.map(orderDtoFull, Order.class));
-//
-//        List<Product> products = orderDtoFull
-//                .getProducts()
-//                .stream()
-//                .map(product -> productRepository.findById(product.getProduct().getId())
-//                        .orElseThrow(() -> new SpringDataException("No product found with ID -> " + product.getProduct().getId())))
-//                .collect(Collectors.toList());
-//
-//        List<OrderProducts> orderProducts = new ArrayList<>();
-//
-//        products.forEach(product -> {
-//            OrderProducts orderProduct = OrderProducts.builder()
-//                    .orderItem(new OrderProductsId(newOrder.getId(), product.getId()))
-//                    .order(newOrder)
-//                    .product(product)
-//                    .quantity(product)
-//        });
-//
-//        orderDtoFull.setId(newOrder.getId());
+        Supplier supplier = supplierRepository.findById(orderDtoFull.getSupplier().getId())
+                .orElseThrow(() -> new SpringDataException("No supplier found with ID -> " + orderDtoFull.getSupplier().getId()));
+
+        Order newOrder = Order.builder()
+                .supplier(supplier)
+                .total(orderDtoFull.getTotal())
+                .itemsCount(orderDtoFull.getItemsCount())
+                .currency(orderDtoFull.getCurrency())
+                .purchasedAt(orderDtoFull.getPurchasedAt())
+                .build();
+        orderRepository.save(modelMapper.map(newOrder, Order.class));
+
+        Map<Long, Product> products = orderDtoFull
+                .getProducts()
+                .stream()
+                .map(product -> productRepository.findById(product.getProduct().getId())
+                        .orElseThrow(() -> new SpringDataException("No product found with ID -> " + product.getProduct().getId())))
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+
+        List<OrderProducts> orderProducts = new ArrayList<>();
+
+        orderDtoFull.getProducts().forEach(product -> {
+            OrderProducts orderProduct = OrderProducts.builder()
+                    .orderItem(new OrderProductsId(newOrder.getId(), product.getProduct().getId()))
+                    .order(newOrder)
+                    .product(products.get(product.getProduct().getId()))
+                    .quantity(product.getQuantity())
+                    .unitPrice(product.getUnitPrice())
+                    .build();
+            orderProducts.add(orderProduct);
+        });
+
+        if (newOrder.getProducts() == null) {
+            newOrder.setProducts(orderProducts);
+        } else {
+            newOrder.getProducts().addAll(orderProducts);
+        }
+        products.values().forEach(product -> product.getOrders().addAll(orderProducts));
+        orderProductsRepository.saveAll(orderProducts);
+//        Order save = orderRepository.save(newOrder);
+        orderDtoFull.setId(newOrder.getId());
         return orderDtoFull;
     }
 
