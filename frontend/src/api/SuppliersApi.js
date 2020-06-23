@@ -2,16 +2,19 @@ import axios from "axios";
 
 
 export default {
-    getSuppliers() {
-        return axios.get("suppliers").then(resp => resp.data["_embedded"].suppliers);
+    getAll() {
+        return axios.get("supplier").then(response => response.data);
     },
-    newSupplier(supplier) {
-        return axios.post("suppliers", supplier);
+    getById(id) {
+        return axios.get("supplier/" + id).then(response => response.data);
     },
-    editSupplier(editedSupplier) {
-        return axios.patch("suppliers/" + editedSupplier.id, editedSupplier);
+    create(payload) {
+        return axios.post("supplier", payload).then(response => response.data);
     },
-    deleteSupplier(supplier) {
-        return axios.delete("suppliers/" + supplier.id);
+    update(payload) {
+        return axios.patch("supplier/" + payload.id, payload).then(response => response.data);
+    },
+    delete(payload) {
+        return axios.delete("supplier/" + payload.id);
     }
 }
