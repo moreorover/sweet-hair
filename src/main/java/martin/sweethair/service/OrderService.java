@@ -2,7 +2,6 @@ package martin.sweethair.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import martin.sweethair.dto.base.OrderDtoBase;
 import martin.sweethair.dto.base.OrderProductDtoBase;
 import martin.sweethair.dto.full.OrderDtoFull;
 import martin.sweethair.exceptions.SpringDataException;

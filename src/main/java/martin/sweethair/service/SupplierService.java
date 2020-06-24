@@ -8,12 +8,9 @@ import martin.sweethair.exceptions.SpringDataException;
 import martin.sweethair.model.Supplier;
 import martin.sweethair.repository.SupplierRepository;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

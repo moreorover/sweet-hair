@@ -1,6 +1,5 @@
 package martin.sweethair.converter;
 
-import martin.sweethair.model.OrderProducts;
 import martin.sweethair.model.OrderProductsId;
 import martin.sweethair.model.SaleProducts;
 import org.springframework.data.rest.webmvc.spi.BackendIdConverter;

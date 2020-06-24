@@ -2,14 +2,14 @@ package martin.sweethair.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import martin.sweethair.dto.base.OrderDtoBase;
-import martin.sweethair.dto.base.OrderProductDtoBase;
 import martin.sweethair.dto.base.SaleDtoBase;
 import martin.sweethair.dto.base.SaleProductDtoBase;
-import martin.sweethair.dto.full.OrderDtoFull;
 import martin.sweethair.dto.full.SaleDtoFull;
 import martin.sweethair.exceptions.SpringDataException;
-import martin.sweethair.model.*;
+import martin.sweethair.model.Product;
+import martin.sweethair.model.Sale;
+import martin.sweethair.model.SaleProducts;
+import martin.sweethair.model.SaleProductsId;
 import martin.sweethair.repository.ProductRepository;
 import martin.sweethair.repository.SaleProductsRepository;
 import martin.sweethair.repository.SaleRepository;

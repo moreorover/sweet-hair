@@ -2,11 +2,8 @@ package martin.sweethair.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import martin.sweethair.dto.base.OrderDtoBase;
-import martin.sweethair.dto.base.OrderProductDtoBase;
 import martin.sweethair.dto.base.SaleDtoBase;
 import martin.sweethair.dto.base.SaleProductDtoBase;
-import martin.sweethair.dto.full.OrderDtoFull;
 import martin.sweethair.dto.full.SaleDtoFull;
 import martin.sweethair.service.SaleService;
 import org.springframework.http.HttpStatus;
