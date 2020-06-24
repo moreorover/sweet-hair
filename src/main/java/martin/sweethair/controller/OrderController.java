@@ -2,7 +2,6 @@ package martin.sweethair.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import martin.sweethair.dto.base.OrderProductDtoBase;
 import martin.sweethair.dto.full.OrderDtoFull;
 import martin.sweethair.service.OrderService;
 import org.springframework.http.HttpStatus;
@@ -53,11 +52,5 @@ public class OrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable("id") Long id) {
         orderService.deleteOrderById(id);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PostMapping("/{id}/products")
-    public ResponseEntity<OrderDtoFull> addProduct(@PathVariable("id") Long id, @RequestBody OrderProductDtoBase orderProductDtoBase) {
-        OrderDtoFull order = orderService.addProduct(id, orderProductDtoBase);
-        return new ResponseEntity<>(order, HttpStatus.CREATED);
     }
 }

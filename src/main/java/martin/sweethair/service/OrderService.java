@@ -97,9 +97,14 @@ public class OrderService {
     public OrderDtoFull updateOrder(OrderDtoFull orderDto) {
         Order order = orderRepository.findById(orderDto.getId())
                 .orElseThrow(() -> new SpringDataException("No order found with ID -> " + orderDto.getId()));
-        // TODO implement update logic
 
-        Order save = orderRepository.save(order);
+        order.getProducts().forEach(orderProductsRepository::delete);
+
+        orderDto.getProducts().forEach(orderProductDtoBase -> this.addProductToOrder(order, orderProductDtoBase));
+
+        this.updateOrderTotals(order, orderDto.getItemsCount(), orderDto.getTotal());
+
+        Order save = orderRepository.getOne(order.getId());
         return modelMapper.map(save, OrderDtoFull.class);
     }
 
@@ -113,28 +118,36 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDtoFull addProduct(Long orderId, OrderProductDtoBase orderProductDto) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new SpringDataException("No order found with ID -> " + orderId));
-
+    public void addProductToOrder(Order order, OrderProductDtoBase orderProductDto) {
         Product product = productRepository.findById(orderProductDto.getProduct().getId())
                 .orElseThrow(() -> new SpringDataException("No product found with ID -> " + orderProductDto.getProduct().getId()));
 
         OrderProducts newOrderProducts = OrderProducts.builder()
-                .orderItem(new OrderProductsId(orderId, orderProductDto.getProduct().getId()))
+                .orderItem(new OrderProductsId(order.getId(), orderProductDto.getProduct().getId()))
                 .order(order)
                 .product(product)
                 .quantity(orderProductDto.getQuantity())
                 .unitPrice(orderProductDto.getUnitPrice())
                 .build();
 
+        if (order.getProducts() == null) {
+            order.setProducts(new ArrayList<>());
+        }
+
+        if (product.getOrders() == null) {
+            product.setOrders(new ArrayList<>());
+        }
+
         order.getProducts().add(newOrderProducts);
         product.getOrders().add(newOrderProducts);
-        order.setTotal(order.getProducts().stream().mapToDouble(OrderProducts::getTotal).sum());
-        order.setItemsCount(order.getProducts().stream().mapToInt(OrderProducts::getQuantity).sum());
 
         orderProductsRepository.save(newOrderProducts);
-        Order save = orderRepository.save(order);
-        return modelMapper.map(save, OrderDtoFull.class);
+    }
+
+    @Transactional
+    public void updateOrderTotals(Order order, int quantity, double total) {
+        order.setItemsCount(quantity);
+        order.setTotal(total);
+        orderRepository.save(order);
     }
 }
