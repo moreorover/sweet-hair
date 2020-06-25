@@ -1,11 +1,9 @@
 package martin.sweethair.repository;
 
-import martin.sweethair.data.models.Sale;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import martin.sweethair.model.Sale;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@CrossOrigin
-@RepositoryRestResource(collectionResourceRel = "sales", path = "sales")
-public interface SaleRepository extends CrudRepository<Sale, Long> {
+@Repository
+public interface SaleRepository extends JpaRepository<Sale, Long> {
 }

@@ -2,19 +2,19 @@ import axios from "axios";
 
 
 export default {
-    getOrders() {
-        return axios.get("orders").then(resp => resp.data["_embedded"].orders);
+    getAll() {
+        return axios.get("order").then(response => response.data);
     },
-    newOrder(order) {
-        return axios.post("orders", order);
+    getById(id) {
+        return axios.get("order/" + id).then(response => response.data);
     },
-    editOrder(editedOrder) {
-        return axios.patch("orders/" + editedOrder.id, editedOrder);
+    create(payload) {
+        return axios.post("order", payload).then(response => response.data);
     },
-    deleteOrder(order) {
-        return axios.delete("orders/" + order.id);
+    update(payload) {
+        return axios.patch("order/" + payload.id, payload).then(response => response.data);
     },
-    deleteOrderItem(payload) {
-        return axios.delete("orders/" + payload.orderItem.orderId + "/products/" + payload.orderItem.orderId + "_" + payload.orderItem.productId, payload)
+    delete(payload) {
+        return axios.delete("order/" + payload.id);
     }
 }

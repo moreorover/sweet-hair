@@ -2,16 +2,19 @@ import axios from "axios";
 
 
 export default {
-    getProducts() {
-        return axios.get("products").then(resp => resp.data["_embedded"].products);
+    getAll() {
+        return axios.get("product").then(response => response.data);
     },
-    newProduct(product) {
-        return axios.post("products", product);
+    getById(id) {
+        return axios.get("product/" + id).then(response => response.data);
     },
-    editProduct(editedProduct) {
-        return axios.patch("products/" + editedProduct.id, editedProduct);
+    create(payload) {
+        return axios.post("product", payload).then(response => response.data);
     },
-    deleteProduct(product) {
-        return axios.delete("products/" + product.id);
+    update(payload) {
+        return axios.patch("product/" + payload.id, payload).then(response => response.data);
+    },
+    delete(payload) {
+        return axios.delete("product/" + payload.id);
     }
 }

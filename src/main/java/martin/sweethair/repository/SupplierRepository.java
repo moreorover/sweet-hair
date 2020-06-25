@@ -1,15 +1,9 @@
 package martin.sweethair.repository;
 
-import martin.sweethair.data.models.Supplier;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import martin.sweethair.model.Supplier;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@CrossOrigin
-@RepositoryRestResource(
-        collectionResourceRel = "suppliers",
-        path = "suppliers"
-//        excerptProjection= SupplierProjection.class
-)
-public interface SupplierRepository extends CrudRepository<Supplier, Long> {
+@Repository
+public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 }

@@ -3,9 +3,15 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import NProgress from 'nprogress'
 
+import customerRoutes from "./customerRoutes";
+import supplierRoutes from "./supplierRoutes";
+import productRoutes from "./productRoutes";
+import orderRoutes from "./orderRoutes";
+import saleRoutes from "./saleRoutes";
+
 Vue.use(VueRouter)
 
-  const routes = [
+  const baseRoutes = [
   {
     path: '/',
     name: 'Home',
@@ -18,44 +24,17 @@ Vue.use(VueRouter)
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
-  {
-    path: '/suppliers',
-    name: 'Suppliers',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/SuppliersList'),
-    props: true
-  },
-  {
-    path: '/orders',
-    name: 'Orders',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/OrdersList'),
-    props: true
-  },
-  {
-    path: '/products',
-    name: 'Products',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/ProductsList'),
-    props: true
-  },
-  {
-    path: '/customers',
-    name: 'Customers',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/CustomersList'),
-    props: true
   }
 ]
+
+const routes = baseRoutes
+    .concat(
+        customerRoutes,
+        orderRoutes,
+        productRoutes,
+        saleRoutes,
+        supplierRoutes
+    )
 
 const router = new VueRouter({
   mode: 'history',

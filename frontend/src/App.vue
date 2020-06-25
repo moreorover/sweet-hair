@@ -37,6 +37,14 @@
             <v-list-item-title>Orders</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link to="/sales">
+          <v-list-item-action>
+            <v-icon></v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Sales</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item link to="/products">
           <v-list-item-action>
             <v-icon></v-icon>
