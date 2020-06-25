@@ -25,7 +25,7 @@
             <v-form ref="customerForm" v-model="formValid">
                 <v-text-field v-model="localSupplier.name" label="Supplier Name" :rules="formRules.nameRules" required></v-text-field>
                 <v-text-field v-model="localSupplier.url" label="Supplier URL" :rules="formRules.nameRules" required></v-text-field>
-                <v-text-field v-model="localSupplier.logo" label="Supplier Logo URL"></v-text-field>
+                <v-text-field v-model="localSupplier.logo" label="Supplier Logo URL" disabled></v-text-field>
             </v-form>
         </v-card-text>
         <v-card-actions>
