@@ -23,8 +23,8 @@ public class SaleController {
     private final SaleService saleService;
 
     @PostMapping
-    public ResponseEntity<SaleDtoBase> createSale(@RequestBody SaleDtoBase saleDtoBase) {
-        SaleDtoBase save = saleService.save(saleDtoBase);
+    public ResponseEntity<SaleDtoFull> createSale(@RequestBody SaleDtoFull saleDtoFull) {
+        SaleDtoFull save = saleService.save(saleDtoFull);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
 
@@ -46,7 +46,7 @@ public class SaleController {
             // if different
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        SaleDtoFull updatedSale = saleService.updateOrder(saleDto);
+        SaleDtoFull updatedSale = saleService.updateSale(saleDto);
         return new ResponseEntity<>(updatedSale, HttpStatus.OK);
     }
 
@@ -54,11 +54,5 @@ public class SaleController {
     public ResponseEntity<Void> deleteSale(@PathVariable("id") Long id) {
         saleService.deleteSaleById(id);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PostMapping("/{id}/products")
-    public ResponseEntity<SaleDtoFull> addProduct(@PathVariable("id") Long id, @RequestBody SaleProductDtoBase saleProductDtoBase) {
-        SaleDtoFull saleDtoFull = saleService.addProduct(id, saleProductDtoBase);
-        return new ResponseEntity<>(saleDtoFull, HttpStatus.CREATED);
     }
 }

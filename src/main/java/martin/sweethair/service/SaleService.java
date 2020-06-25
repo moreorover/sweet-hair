@@ -2,14 +2,14 @@ package martin.sweethair.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import martin.sweethair.dto.base.OrderProductDtoBase;
 import martin.sweethair.dto.base.SaleDtoBase;
 import martin.sweethair.dto.base.SaleProductDtoBase;
+import martin.sweethair.dto.full.OrderDtoFull;
 import martin.sweethair.dto.full.SaleDtoFull;
 import martin.sweethair.exceptions.SpringDataException;
-import martin.sweethair.model.Product;
-import martin.sweethair.model.Sale;
-import martin.sweethair.model.SaleProducts;
-import martin.sweethair.model.SaleProductsId;
+import martin.sweethair.model.*;
+import martin.sweethair.repository.CustomerRepository;
 import martin.sweethair.repository.ProductRepository;
 import martin.sweethair.repository.SaleProductsRepository;
 import martin.sweethair.repository.SaleRepository;
@@ -17,7 +17,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,19 +34,59 @@ public class SaleService {
     private final SaleProductsRepository saleProductsRepository;
     private final SaleRepository saleRepository;
     private final ProductRepository productRepository;
+    private final CustomerRepository customerRepository;
 
     @Transactional
-    public SaleDtoBase save(SaleDtoBase saleDtoBase) {
-        Sale save = saleRepository.save(modelMapper.map(saleDtoBase, Sale.class));
-        saleDtoBase.setId(save.getId());
-        return saleDtoBase;
+    public SaleDtoFull save(SaleDtoFull saleDtoFull) {
+        Customer customer = customerRepository.findById(saleDtoFull.getCustomer().getId())
+                .orElseThrow(() -> new SpringDataException("No customer found with ID -> " + saleDtoFull.getCustomer().getId()));
+
+        Sale newSale = Sale.builder()
+                .customer(customer)
+                .total(saleDtoFull.getTotal())
+                .itemsCount(saleDtoFull.getItemsCount())
+                .currency(saleDtoFull.getCurrency())
+                .soldAt(saleDtoFull.getSoldAt())
+                .build();
+        saleRepository.save(modelMapper.map(newSale, Sale.class));
+
+        Map<Long, Product> products = saleDtoFull
+                .getProducts()
+                .stream()
+                .map(product -> productRepository.findById(product.getProduct().getId())
+                        .orElseThrow(() -> new SpringDataException("No product found with ID -> " + product.getProduct().getId())))
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+
+        List<SaleProducts> saleProducts = new ArrayList<>();
+
+        saleDtoFull.getProducts().forEach(product -> {
+            SaleProducts saleProduct = SaleProducts.builder()
+                    .saleItem(new SaleProductsId(newSale.getId(), product.getProduct().getId()))
+                    .sale(newSale)
+                    .product(products.get(product.getProduct().getId()))
+                    .quantity(product.getQuantity())
+                    .unitPrice(product.getUnitPrice())
+                    .build();
+            saleProducts.add(saleProduct);
+        });
+
+        if (newSale.getProducts() == null) {
+            newSale.setProducts(saleProducts);
+        } else {
+            newSale.getProducts().addAll(saleProducts);
+        }
+        products.values().forEach(product -> product.getSales().addAll(saleProducts));
+        saleProductsRepository.saveAll(saleProducts);
+//        Order save = orderRepository.save(newOrder);
+        saleDtoFull.setId(newSale.getId());
+        return saleDtoFull;
     }
 
     @Transactional(readOnly = true)
     public Set<SaleDtoFull> getAll() {
         return saleRepository.findAll()
                 .stream()
-                .map(order -> modelMapper.map(order, SaleDtoFull.class))
+                .map(sale -> modelMapper.map(sale, SaleDtoFull.class))
                 .collect(Collectors.toSet());
     }
 
@@ -53,12 +97,47 @@ public class SaleService {
     }
 
     @Transactional
-    public SaleDtoFull updateOrder(SaleDtoFull saleDtoFull) {
-        Sale sale = saleRepository.findById(saleDtoFull.getId())
-                .orElseThrow(() -> new SpringDataException("No sale found with ID -> " + saleDtoFull.getId()));
-        // TODO implement update logic
+    public SaleDtoFull updateSale(SaleDtoFull saleDto) {
+        Sale sale = saleRepository.findById(saleDto.getId())
+                .orElseThrow(() -> new SpringDataException("No sale found with ID -> " + saleDto.getId()));
 
-        Sale save = saleRepository.save(sale);
+        Map<Long, SaleProductDtoBase> payloadProducts = saleDto
+                .getProducts()
+                .stream()
+                .collect(Collectors.toMap(SaleProductDtoBase::getProductId, Function.identity()));
+
+        sale.getProducts().forEach(saleProduct -> {
+            SaleProductDtoBase o = payloadProducts.get(saleProduct.getProduct().getId());
+            if (o == null) {
+                saleProductsRepository.delete(saleProduct);
+            } else {
+                if (o.getUnitPrice() != saleProduct.getUnitPrice() || o.getQuantity() != saleProduct.getQuantity()) {
+                    // update
+                    saleProduct.setUnitPrice(o.getUnitPrice());
+                    saleProduct.setQuantity(o.getQuantity());
+                }
+                payloadProducts.remove(saleProduct.getProduct().getId());
+            }
+        });
+
+        if (payloadProducts.size() > 0) {
+            payloadProducts.values().forEach(payloadProduct -> this.addProductToSale(sale, payloadProduct));
+        }
+
+        if (!sale.getCustomer().getId().equals(saleDto.getCustomer().getId())) {
+            Customer customer = customerRepository.findById(saleDto.getCustomer().getId())
+                    .orElseThrow(() -> new SpringDataException("No customer found with ID -> " + saleDto.getId()));
+
+            sale.setCustomer(customer);
+        }
+
+        if (sale.getSoldAt() != saleDto.getSoldAt()) {
+            sale.setSoldAt(saleDto.getSoldAt());
+        }
+
+        this.updateOrderTotals(sale, saleDto.getItemsCount(), saleDto.getTotal());
+
+        Sale save = saleRepository.getOne(sale.getId());
         return modelMapper.map(save, SaleDtoFull.class);
     }
 
@@ -72,28 +151,36 @@ public class SaleService {
     }
 
     @Transactional
-    public SaleDtoFull addProduct(Long saleId, SaleProductDtoBase saleProductDtoBase) {
-        Sale sale = saleRepository.findById(saleId)
-                .orElseThrow(() -> new SpringDataException("No sale found with ID -> " + saleId));
-
-        Product product = productRepository.findById(saleProductDtoBase.getProduct().getId())
-                .orElseThrow(() -> new SpringDataException("No product found with ID -> " + saleProductDtoBase.getProduct().getId()));
+    public void addProductToSale(Sale sale, SaleProductDtoBase saleProductDto) {
+        Product product = productRepository.findById(saleProductDto.getProduct().getId())
+                .orElseThrow(() -> new SpringDataException("No product found with ID -> " + saleProductDto.getProduct().getId()));
 
         SaleProducts newSaleProducts = SaleProducts.builder()
-                .saleItem(new SaleProductsId(saleId, saleProductDtoBase.getProduct().getId()))
+                .saleItem(new SaleProductsId(sale.getId(), saleProductDto.getProduct().getId()))
                 .sale(sale)
                 .product(product)
-                .quantity(saleProductDtoBase.getQuantity())
-                .unitPrice(saleProductDtoBase.getUnitPrice())
+                .quantity(saleProductDto.getQuantity())
+                .unitPrice(saleProductDto.getUnitPrice())
                 .build();
+
+        if (sale.getProducts() == null) {
+            sale.setProducts(new ArrayList<>());
+        }
+
+        if (product.getOrders() == null) {
+            product.setOrders(new ArrayList<>());
+        }
 
         sale.getProducts().add(newSaleProducts);
         product.getSales().add(newSaleProducts);
-        sale.setTotal(sale.getProducts().stream().mapToDouble(SaleProducts::getTotal).sum());
-        sale.setItemsCount(sale.getProducts().stream().mapToInt(SaleProducts::getQuantity).sum());
 
         saleProductsRepository.save(newSaleProducts);
-        Sale save = saleRepository.save(sale);
-        return modelMapper.map(save, SaleDtoFull.class);
+    }
+
+    @Transactional
+    public void updateOrderTotals(Sale sale, int quantity, double total) {
+        sale.setItemsCount(quantity);
+        sale.setTotal(total);
+        saleRepository.save(sale);
     }
 }
