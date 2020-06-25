@@ -7,6 +7,7 @@ import customerRoutes from "./customerRoutes";
 import supplierRoutes from "./supplierRoutes";
 import productRoutes from "./productRoutes";
 import orderRoutes from "./orderRoutes";
+import saleRoutes from "./saleRoutes";
 
 Vue.use(VueRouter)
 
@@ -31,6 +32,7 @@ const routes = baseRoutes
         customerRoutes,
         orderRoutes,
         productRoutes,
+        saleRoutes,
         supplierRoutes
     )
 
