@@ -13,4 +13,8 @@ public class OrderProductDtoBase {
     private double unitPrice;
 
     private ProductDtoBase product;
+
+    public Long getProductId() {
+        return this.getProduct().getId();
+    }
 }

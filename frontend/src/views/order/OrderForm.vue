@@ -1,92 +1,109 @@
 <template>
     <div>
-    <v-toolbar>
-        <v-toolbar-title>Orders</v-toolbar-title>
-        <v-divider
-                class="mx-4"
-                inset
-                vertical
-        ></v-divider>
-        <v-spacer></v-spacer>
-        <v-btn
-                color="primary"
-                dark
-                class="mx-4"
-                link :to="{ name: 'Orders' }"
-        >List Orders</v-btn>
-    </v-toolbar>
+        <v-toolbar>
+            <v-toolbar-title>Orders</v-toolbar-title>
+            <v-divider
+                    class="mx-4"
+                    inset
+                    vertical
+            ></v-divider>
+            <v-spacer></v-spacer>
+            <v-btn
+                    color="primary"
+                    dark
+                    class="mx-4"
+                    link :to="{ name: 'Orders' }"
+            >List Orders
+            </v-btn>
+        </v-toolbar>
 
-    <v-card class="mx-auto ma-3">
-        <v-card-title>
-            <span class="headline">{{ title }}</span>
-        </v-card-title>
+        <v-card class="mx-auto ma-3">
+            <v-card-title>
+                <span class="headline">{{ title }}</span>
+            </v-card-title>
 
-        <v-card-text>
-            <v-form ref="customerForm" v-model="formValid">
-                <v-row>
-                    <v-col cols="12" md="4">
-                        <v-row justify="center">
-                            <v-date-picker v-model="localOrder.purchasedAt" :rules="formRules.dateRules"></v-date-picker>
-                        </v-row>
-                    </v-col>
-                    <v-col cols="12" md="8">
-                        <v-select
-                                :items="currencies"
-                                label="Currency"
-                                v-model="localOrder.currency"
-                                :rules="formRules.currencyRules"
-                        ></v-select>
-                        <v-select
-                                :items="suppliersSorted"
-                                label="Supplier"
-                                item-value="value"
-                                v-model="localOrder.supplier"
-                                :rules="formRules.supplierRules"
-                        ></v-select>
-                        <v-container v-for="product in localOrder.products" :key="product.id">
+            <v-card-text>
+                <v-form ref="customerForm" v-model="formValid">
+                    <v-row>
+                        <v-col cols="12" md="4">
+                            <v-row justify="center">
+                                <v-date-picker v-model="localOrder.purchasedAt"
+                                               :rules="formRules.dateRules"></v-date-picker>
+                            </v-row>
+                        </v-col>
+                        <v-col cols="12" md="8">
+                            <v-select
+                                    :items="currencies"
+                                    label="Currency"
+                                    v-model="localOrder.currency"
+                                    :rules="formRules.currencyRules"
+                            ></v-select>
                             <v-autocomplete
-                                    :items="productsSorted"
-                                    label="Pick Product"
+                                    :items="suppliersSorted"
+                                    label="Supplier"
                                     item-value="value"
-                                    v-model="product.product"
-                                    :rules="formRules.productRules"
+                                    v-model="localOrder.supplier"
+                                    :rules="formRules.supplierRules"
                             ></v-autocomplete>
-                            <v-row>
-                                <v-col>
-                                    <v-text-field label="Quantity" type="number" min="1" v-model.number="product.quantity" :rules="formRules.numberRules" dense></v-text-field>
-                                </v-col>
-                                <v-col>
-                                    <v-text-field label="Unit Price" type="float" v-model.number="product.unitPrice" :rules="formRules.numberRules" dense></v-text-field>
-                                </v-col>
-                            </v-row>
-                            <v-row>
-                                <v-chip
-                                        class="ma-2"
-                                        color="secondary"
-                                >Total: {{ product.total }} {{ localOrder.currency }}</v-chip>
-                                <v-spacer></v-spacer>
-                                <v-btn @click="removeProduct(product.product.id)">Remove</v-btn>
-                            </v-row>
-                        </v-container>
-                        <v-card @click="addProduct" color="indigo lighten-5" class="mx-auto ma-3" :disabled="!formValid">
-                            <v-card-title class="justify-center">Add Product</v-card-title>
-                        </v-card>
-                        <v-container d-flex class="mx-auto ma-3 justify-space-around">
-                                <v-chip color="secondary"
-                                >Product Count: {{ localOrder.itemsCount }}</v-chip>
-                                <v-chip color="secondary"
-                                >Total: {{ localOrder.total }} {{ localOrder.currency }}</v-chip>
-                        </v-container>
-                    </v-col>
-                </v-row>
-            </v-form>
-        </v-card-text>
-        <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="save" :disabled="!formValid || formInputsChanged">Save</v-btn>
-        </v-card-actions>
-    </v-card>
+                            <v-card v-for="product in localOrder.products" :key="product.id" class="mx-auto ma-3">
+                                <v-card-text>
+                                    <v-autocomplete
+                                            :items="productsSorted"
+                                            label="Pick Product"
+                                            item-value="value"
+                                            v-model="product.product"
+                                            :rules="formRules.productRules"
+                                    ></v-autocomplete>
+                                    <v-row>
+                                        <v-col>
+                                            <v-text-field label="Quantity" type="number" min="1"
+                                                          v-model.number="product.quantity"
+                                                          :rules="formRules.numberRules" dense></v-text-field>
+                                        </v-col>
+                                        <v-col>
+                                            <v-text-field label="Unit Price" type="float"
+                                                          v-model.number="product.unitPrice"
+                                                          :rules="formRules.numberRules" dense></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-chip
+                                            class="ma-2"
+                                            color="secondary"
+                                    >Total: {{ product.total }} {{ localOrder.currency }}
+                                    </v-chip>
+                                    <v-spacer></v-spacer>
+                                    <v-btn @click="removeProduct(product.product.id)">Remove</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                            <v-card @click="addProduct" color="indigo lighten-5" class="mx-auto ma-3"
+                                    :disabled="!formValid">
+                                <v-card-title class="justify-center">Add Product</v-card-title>
+                            </v-card>
+                            <v-card d-flex class="mx-auto ma-3">
+                                <v-card-title>
+                                    <v-spacer></v-spacer>
+                                    <v-chip color="secondary"
+                                    >Product Count: {{ localOrder.itemsCount }}
+                                    </v-chip>
+                                    <v-spacer></v-spacer>
+                                    <v-chip color="secondary"
+                                    >Total: {{ localOrder.total }} {{ localOrder.currency }}
+                                    </v-chip>
+                                    <v-spacer></v-spacer>
+                                </v-card-title>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </v-form>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="save" :disabled="!formValid || formInputsChanged">Save</v-btn>
+            </v-card-actions>
+        </v-card>
     </div>
 </template>
 
@@ -163,14 +180,14 @@
         },
         created() {
             if (this.order) {
-                this.localOrder = { ...this.order }
+                this.localOrder = {...this.order}
             } else {
-                this.localOrder = { ...this.defaultOrder }
+                this.localOrder = {...this.defaultOrder}
             }
         },
         watch: {
             'localOrder.products': {
-                handler: function(arrayUpdated) {
+                handler: function (arrayUpdated) {
                     this.localOrder.total = 0
                     this.localOrder.itemsCount = 0
                     arrayUpdated.forEach(product => {
@@ -197,19 +214,19 @@
             },
             suppliersSorted() {
                 let sa = []
-                this.suppliers.forEach(supplier => sa.push({ text: supplier.name, value: supplier }))
+                this.suppliers.forEach(supplier => sa.push({text: supplier.name, value: supplier}))
                 return _.orderBy(sa, 'text')
             },
             productsSorted() {
                 let pa = []
-                this.products.forEach(product => pa.push({ text: product.name, value: product }))
+                this.products.forEach(product => pa.push({text: product.name, value: product}))
                 return _.orderBy(pa, 'text')
             }
         },
         methods: {
             save() {
                 NProgress.start()
-                if (this.localOrder.id){
+                if (this.localOrder.id) {
                     OrdersApi
                         .update(this.localOrder)
                         .then(result => {
@@ -227,7 +244,7 @@
                         .then(result => {
                             this.$router.push({
                                 name: "Order Details",
-                                params: { id: result.id }
+                                params: {id: result.id}
                             })
                         })
                         .catch(error => {
@@ -237,7 +254,7 @@
                 }
             },
             addProduct() {
-                this.localOrder.products.push({ ...this.defaultProduct })
+                this.localOrder.products.push({...this.defaultProduct})
             },
             removeProduct(event) {
                 this.localOrder.products = this.localOrder.products.filter(product => product.product.id !== event)

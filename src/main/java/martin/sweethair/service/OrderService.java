@@ -98,9 +98,43 @@ public class OrderService {
         Order order = orderRepository.findById(orderDto.getId())
                 .orElseThrow(() -> new SpringDataException("No order found with ID -> " + orderDto.getId()));
 
-        order.getProducts().forEach(orderProductsRepository::delete);
+        Map<Long, OrderProductDtoBase> payloadProducts = orderDto
+                .getProducts()
+                .stream()
+                .collect(Collectors.toMap(OrderProductDtoBase::getProductId, Function.identity()));
 
-        orderDto.getProducts().forEach(orderProductDtoBase -> this.addProductToOrder(order, orderProductDtoBase));
+        order.getProducts().forEach(orderProduct -> {
+            OrderProductDtoBase o = payloadProducts.get(orderProduct.getProduct().getId());
+            if (o == null) {
+                orderProductsRepository.delete(orderProduct);
+            } else {
+                if (o.getUnitPrice() != orderProduct.getUnitPrice() || o.getQuantity() != orderProduct.getQuantity()) {
+                    // update
+                    orderProduct.setUnitPrice(o.getUnitPrice());
+                    orderProduct.setQuantity(o.getQuantity());
+                    payloadProducts.remove(orderProduct.getProduct().getId());
+                } else {
+                    payloadProducts.remove(orderProduct.getProduct().getId());
+                }
+            }
+        });
+
+        if (payloadProducts.size() > 0) {
+            payloadProducts.values().forEach(payloadProduct -> {
+                this.addProductToOrder(order, payloadProduct);
+            });
+        }
+
+        if (!order.getSupplier().getId().equals(orderDto.getSupplier().getId())) {
+            Supplier supplier = supplierRepository.findById(orderDto.getSupplier().getId())
+                    .orElseThrow(() -> new SpringDataException("No supplier found with ID -> " + orderDto.getId()));
+
+            order.setSupplier(supplier);
+        }
+
+        if (order.getPurchasedAt() != orderDto.getPurchasedAt()) {
+            order.setPurchasedAt(orderDto.getPurchasedAt());
+        }
 
         this.updateOrderTotals(order, orderDto.getItemsCount(), orderDto.getTotal());
 
