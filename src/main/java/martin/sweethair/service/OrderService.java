@@ -112,17 +112,13 @@ public class OrderService {
                     // update
                     orderProduct.setUnitPrice(o.getUnitPrice());
                     orderProduct.setQuantity(o.getQuantity());
-                    payloadProducts.remove(orderProduct.getProduct().getId());
-                } else {
-                    payloadProducts.remove(orderProduct.getProduct().getId());
                 }
+                payloadProducts.remove(orderProduct.getProduct().getId());
             }
         });
 
         if (payloadProducts.size() > 0) {
-            payloadProducts.values().forEach(payloadProduct -> {
-                this.addProductToOrder(order, payloadProduct);
-            });
+            payloadProducts.values().forEach(payloadProduct -> this.addProductToOrder(order, payloadProduct));
         }
 
         if (!order.getSupplier().getId().equals(orderDto.getSupplier().getId())) {
