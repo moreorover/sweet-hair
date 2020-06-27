@@ -65,6 +65,12 @@ public class OrderService {
                     .unitPrice(product.getUnitPrice())
                     .build();
             orderProducts.add(orderProduct);
+
+            Product p = productRepository.findById(product.getProduct().getId())
+                    .orElseThrow(() -> new SpringDataException("No product found with ID -> " + product.getProduct().getId()));
+
+            p.stockCountChangedFromOrder(0 , product.getQuantity());
+            productRepository.save(p);
         });
 
         if (newOrder.getProducts() == null) {
@@ -106,12 +112,17 @@ public class OrderService {
         order.getProducts().forEach(orderProduct -> {
             OrderProductDtoBase o = payloadProducts.get(orderProduct.getProduct().getId());
             if (o == null) {
+                orderProduct.getProduct().stockCountChangedFromOrder(orderProduct.getQuantity(), 0);
+                productRepository.save(orderProduct.getProduct());
                 orderProductsRepository.delete(orderProduct);
             } else {
-                if (o.getUnitPrice() != orderProduct.getUnitPrice() || o.getQuantity() != orderProduct.getQuantity()) {
-                    // update
+                if (o.getUnitPrice() != orderProduct.getUnitPrice()) {
                     orderProduct.setUnitPrice(o.getUnitPrice());
+                }
+                if (o.getQuantity() != orderProduct.getQuantity()) {
+                    orderProduct.getProduct().stockCountChangedFromOrder(orderProduct.getQuantity(), o.getQuantity());
                     orderProduct.setQuantity(o.getQuantity());
+                    productRepository.save(orderProduct.getProduct());
                 }
                 payloadProducts.remove(orderProduct.getProduct().getId());
             }
@@ -142,7 +153,12 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new SpringDataException("No order found with ID -> " + id));
 
-        order.getProducts().forEach(orderProductsRepository::delete);
+        order.getProducts().forEach(orderProduct -> {
+            Product product = productRepository.findById(orderProduct.getProduct().getId())
+                    .orElseThrow(() -> new SpringDataException("No product found with ID -> " + orderProduct.getProduct().getId()));
+            product.stockCountChangedFromOrder(orderProduct.getQuantity(), 0);
+            orderProductsRepository.delete(orderProduct);
+        });
 
         orderRepository.deleteById(id);
     }
@@ -151,6 +167,9 @@ public class OrderService {
     public void addProductToOrder(Order order, OrderProductDtoBase orderProductDto) {
         Product product = productRepository.findById(orderProductDto.getProduct().getId())
                 .orElseThrow(() -> new SpringDataException("No product found with ID -> " + orderProductDto.getProduct().getId()));
+
+        product.stockCountChangedFromOrder(0 , orderProductDto.getQuantity());
+        productRepository.save(product);
 
         OrderProducts newOrderProducts = OrderProducts.builder()
                 .orderItem(new OrderProductsId(order.getId(), orderProductDto.getProduct().getId()))

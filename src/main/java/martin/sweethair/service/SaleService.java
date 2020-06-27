@@ -2,10 +2,7 @@ package martin.sweethair.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import martin.sweethair.dto.base.OrderProductDtoBase;
-import martin.sweethair.dto.base.SaleDtoBase;
 import martin.sweethair.dto.base.SaleProductDtoBase;
-import martin.sweethair.dto.full.OrderDtoFull;
 import martin.sweethair.dto.full.SaleDtoFull;
 import martin.sweethair.exceptions.SpringDataException;
 import martin.sweethair.model.*;
@@ -68,6 +65,12 @@ public class SaleService {
                     .unitPrice(product.getUnitPrice())
                     .build();
             saleProducts.add(saleProduct);
+
+            Product p = productRepository.findById(product.getProduct().getId())
+                    .orElseThrow(() -> new SpringDataException("No product found with ID -> " + product.getProduct().getId()));
+
+            p.stockCountChangedFromSale(0 , product.getQuantity());
+            productRepository.save(p);
         });
 
         if (newSale.getProducts() == null) {
@@ -111,9 +114,11 @@ public class SaleService {
             if (o == null) {
                 saleProductsRepository.delete(saleProduct);
             } else {
-                if (o.getUnitPrice() != saleProduct.getUnitPrice() || o.getQuantity() != saleProduct.getQuantity()) {
-                    // update
+                if (o.getUnitPrice() != saleProduct.getUnitPrice()) {
                     saleProduct.setUnitPrice(o.getUnitPrice());
+                }
+                if (o.getQuantity() != saleProduct.getQuantity()) {
+                    saleProduct.getProduct().stockCountChangedFromSale(saleProduct.getQuantity(), o.getQuantity());
                     saleProduct.setQuantity(o.getQuantity());
                 }
                 payloadProducts.remove(saleProduct.getProduct().getId());
@@ -145,7 +150,12 @@ public class SaleService {
         Sale sale = saleRepository.findById(id)
                 .orElseThrow(() -> new SpringDataException("No sale found with ID -> " + id));
 
-        sale.getProducts().forEach(saleProductsRepository::delete);
+        sale.getProducts().forEach(saleProduct -> {
+            Product product = productRepository.findById(saleProduct.getProduct().getId())
+                    .orElseThrow(() -> new SpringDataException("No product found with ID -> " + saleProduct.getProduct().getId()));
+            product.stockCountChangedFromSale(saleProduct.getQuantity(), 0);
+            saleProductsRepository.delete(saleProduct);
+        });
 
         saleRepository.deleteById(id);
     }
@@ -154,6 +164,9 @@ public class SaleService {
     public void addProductToSale(Sale sale, SaleProductDtoBase saleProductDto) {
         Product product = productRepository.findById(saleProductDto.getProduct().getId())
                 .orElseThrow(() -> new SpringDataException("No product found with ID -> " + saleProductDto.getProduct().getId()));
+
+        product.stockCountChangedFromOrder(0 , saleProductDto.getQuantity());
+        productRepository.save(product);
 
         SaleProducts newSaleProducts = SaleProducts.builder()
                 .saleItem(new SaleProductsId(sale.getId(), saleProductDto.getProduct().getId()))

@@ -48,6 +48,9 @@ public class ProductService {
                 .orElseThrow(() -> new SpringDataException("No product found with ID -> " + productDtoBase.getId()));
 
         product.setName(productDtoBase.getName());
+        product.setInStockCount(productDtoBase.getInStockCount());
+        product.setSize(productDtoBase.getSize());
+        product.setSizeUnit(productDtoBase.getSizeUnit());
         productRepository.save(product);
         return modelMapper.map(product, ProductDtoBase.class);
     }
