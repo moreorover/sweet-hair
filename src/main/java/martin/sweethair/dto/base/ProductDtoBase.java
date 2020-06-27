@@ -11,4 +11,7 @@ public class ProductDtoBase {
 
     private Long id;
     private String name;
+    private int inStockCount;
+    private int size;
+    private String sizeUnit;
 }

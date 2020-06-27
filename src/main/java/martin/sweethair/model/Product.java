@@ -19,10 +19,21 @@ public class Product {
     private Long id;
 
     private String name;
+    private int inStockCount;
+    private int size;
+    private String sizeUnit;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderProducts> orders;
 
     @OneToMany(mappedBy = "sale", fetch = FetchType.LAZY)
     private List<SaleProducts> sales;
+
+    public void stockCountChangedFromOrder(int oldOrderProductQuantity, int newOrderProductQuantity) {
+        this.inStockCount = this.inStockCount - oldOrderProductQuantity + newOrderProductQuantity;
+    }
+
+    public void stockCountChangedFromSale(int oldOrderProductQuantity, int newOrderProductQuantity) {
+        this.inStockCount = this.inStockCount + oldOrderProductQuantity - newOrderProductQuantity;
+    }
 }
