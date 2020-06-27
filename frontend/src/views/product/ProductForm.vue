@@ -24,6 +24,9 @@
         <v-card-text>
             <v-form ref="customerForm" v-model="formValid">
                 <v-text-field v-model="localProduct.name" label="Product Name" :rules="formRules.nameRules" required></v-text-field>
+                <v-text-field v-model.number="localProduct.inStockCount" label="In Stock Count" :rules="formRules.nameRules" disabled></v-text-field>
+                <v-text-field v-model.number="localProduct.size" label="Product Size" :rules="formRules.sizeRules" required></v-text-field>
+                <v-text-field v-model="localProduct.sizeUnit" label="Product Size Unit (g, ml, etc...)" :rules="formRules.sizeUnitRules" required></v-text-field>
             </v-form>
         </v-card-text>
         <v-card-actions>
@@ -53,6 +56,14 @@
                     nameRules: [
                         v => !!v || 'Name is required',
                         v => (v && v.length >= 5) || 'Input must be greater than 5 characters',
+                    ],
+                    sizeUnitRules: [
+                        v => !!v || 'Size Unit is required',
+                        v => (v && v.length <= 3) || 'Input must be less or equal to 3 characters',
+                    ],
+                    sizeRules: [
+                        v => !!v || 'Size is required',
+                        v => (v && v > 0) || 'Input must be greater than 0',
                     ]
                 },
                 localProduct: { ...this.product }
