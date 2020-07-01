@@ -9,8 +9,6 @@ import 'nprogress/nprogress.css'
 
 axios.defaults.baseURL = process.env.VUE_APP_AXIOS_BASE_URL
 
-console.log(process.env.VUE_APP_AXIOS_BASE_URL)
-
 Vue.config.productionTip = false
 
 new Vue({
