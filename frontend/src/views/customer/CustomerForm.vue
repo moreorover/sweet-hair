@@ -76,10 +76,9 @@
                 if (this.localCustomer.id){
                     CustomersApi
                         .update(this.localCustomer)
-                        .then(result => {
+                        .then(() => {
                             this.$router.push({
-                                name: "Customer Details",
-                                params: {id: result.id}
+                                name: "Customers"
                             })
                         })
                         .catch(() => {
@@ -88,10 +87,9 @@
                 } else {
                     CustomersApi
                         .create(this.localCustomer)
-                        .then(result => {
+                        .then(() => {
                             this.$router.push({
-                                name: "Customer Details",
-                                params: { id: result.id }
+                                name: "Customers"
                             })
                         })
                         .catch(() => {

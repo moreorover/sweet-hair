@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto ma-3">
+    <v-card class="ma-3">
         <v-card-title>
             {{ product.name }}
         </v-card-title>

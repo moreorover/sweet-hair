@@ -15,7 +15,11 @@
                     link :to="{ name: 'Create Customer' }"
             >New Customer</v-btn>
         </v-toolbar>
-        <CustomerCard v-for="customer in customersSorted" :key="customer.id" :customer="customer" @deleted="reloadPage"></CustomerCard>
+        <v-layout row wrap>
+            <v-flex xs12 sm6 md4 lg3 v-for="customer in customersSorted" :key="customer.id" :customer="customer">
+                <CustomerCard :key="customer.id" :customer="customer" @deleted="reloadPage"></CustomerCard>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 

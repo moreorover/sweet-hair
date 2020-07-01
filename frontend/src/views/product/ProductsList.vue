@@ -15,7 +15,11 @@
                     link :to="{ name: 'Create Product' }"
             >New Product</v-btn>
         </v-toolbar>
-        <ProductCard v-for="product in productsSorted" :key="product.id" :product="product" @deleted="reloadPage"></ProductCard>
+        <v-layout row wrap>
+            <v-flex xs12 sm6 md4 lg3 v-for="product in productsSorted" :key="product.id" :product="product">
+                <ProductCard :key="product.id" :product="product" @deleted="reloadPage"></ProductCard>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 

@@ -15,7 +15,11 @@
                     link :to="{ name: 'Create Order' }"
             >New Order</v-btn>
         </v-toolbar>
-        <OrderCard v-for="order in ordersSorted" :key="order.id" :order="order" @deleted="reloadPage"></OrderCard>
+        <v-layout row wrap>
+            <v-flex xs12 sm6 md4 lg3 v-for="order in ordersSorted" :key="order.id" :order="order">
+                <OrderCard :key="order.id" :order="order" @deleted="reloadPage"></OrderCard>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 

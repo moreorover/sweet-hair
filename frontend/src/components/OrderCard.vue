@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto ma-3">
+    <v-card class="ma-3">
         <v-list-item four-line>
             <v-list-item-content>
                 <div class="overline mb-4">{{ order.purchasedAt }}</div>

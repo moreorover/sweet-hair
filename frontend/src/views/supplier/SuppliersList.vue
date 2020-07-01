@@ -15,7 +15,11 @@
                     link :to="{ name: 'Create Supplier' }"
             >New Supplier</v-btn>
         </v-toolbar>
-        <SupplierCard v-for="supplier in suppliersSorted" :key="supplier.id" :supplier="supplier" @deleted="reloadPage"></SupplierCard>
+        <v-layout row wrap>
+            <v-flex xs12 sm6 md4 lg3 v-for="supplier in suppliersSorted" :key="supplier.id" :supplier="supplier">
+                <SupplierCard :key="supplier.id" :supplier="supplier" @deleted="reloadPage"></SupplierCard>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 

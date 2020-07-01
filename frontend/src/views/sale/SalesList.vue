@@ -15,7 +15,11 @@
                     link :to="{ name: 'Create Sale' }"
             >New Sale</v-btn>
         </v-toolbar>
-        <SaleCard v-for="sale in salesSorted" :key="sale.id" :sale="sale" @deleted="reloadPage"></SaleCard>
+        <v-layout row wrap>
+        <v-flex xs12 sm6 md4 lg3 v-for="sale in salesSorted" :key="sale.id" :sale="sale">
+            <SaleCard :key="sale.id" :sale="sale" @deleted="reloadPage"></SaleCard>
+        </v-flex>
+        </v-layout>
     </div>
 </template>
 
