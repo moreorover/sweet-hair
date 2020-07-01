@@ -7,7 +7,9 @@ import vuetify from './plugins/vuetify';
 import lodash from "./plugins/lodash";
 import 'nprogress/nprogress.css'
 
-axios.defaults.baseURL = "http://localhost:8080/api"
+axios.defaults.baseURL = process.env.VUE_APP_AXIOS_BASE_URL
+
+console.log(process.env.VUE_APP_AXIOS_BASE_URL)
 
 Vue.config.productionTip = false
 
