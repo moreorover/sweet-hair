@@ -10,7 +10,7 @@
             <v-list dense>
                 <v-list-item v-for="sale in customer.sales" :key="sale.id">
                     <v-list-item-content>
-                        <v-list-item-title v-text="sale.soldAt"></v-list-item-title>
+                        <v-list-item-title v-text="sale.operationDate"></v-list-item-title>
                         <v-list-item-subtitle v-text="'Total: ' + sale.total + sale.currency">></v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>

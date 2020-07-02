@@ -21,7 +21,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate purchasedAt;
+    private LocalDate operationDate;
     private double total;
     private int itemsCount;
     private String currency;

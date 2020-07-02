@@ -43,7 +43,7 @@ public class SaleService {
                 .total(saleDtoFull.getTotal())
                 .itemsCount(saleDtoFull.getItemsCount())
                 .currency(saleDtoFull.getCurrency())
-                .soldAt(saleDtoFull.getSoldAt())
+                .operationDate(saleDtoFull.getOperationDate())
                 .build();
         saleRepository.save(modelMapper.map(newSale, Sale.class));
 
@@ -136,8 +136,8 @@ public class SaleService {
             sale.setCustomer(customer);
         }
 
-        if (sale.getSoldAt() != saleDto.getSoldAt()) {
-            sale.setSoldAt(saleDto.getSoldAt());
+        if (sale.getOperationDate() != saleDto.getOperationDate()) {
+            sale.setOperationDate(saleDto.getOperationDate());
         }
 
         this.updateOrderTotals(sale, saleDto.getItemsCount(), saleDto.getTotal());

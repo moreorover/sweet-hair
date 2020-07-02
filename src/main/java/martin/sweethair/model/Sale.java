@@ -21,7 +21,7 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate soldAt;
+    private LocalDate operationDate;
     private double total;
     private int itemsCount;
     private String currency;

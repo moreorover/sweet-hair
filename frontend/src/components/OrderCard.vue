@@ -2,7 +2,7 @@
     <v-card class="ma-3">
         <v-list-item four-line>
             <v-list-item-content>
-                <div class="overline mb-4">{{ order.purchasedAt }}</div>
+                <div class="overline mb-4">{{ order.operationDate }}</div>
                 <v-list-item-title class="headline mb-1">From: {{ order.supplier.name }}</v-list-item-title>
                 <v-list-item-subtitle>Total: {{order.total | twoDecimal}} {{ order.currency }}</v-list-item-subtitle>
                 <v-list-item-subtitle>Item count: {{ order.itemsCount }}</v-list-item-subtitle>
@@ -31,7 +31,7 @@
         props: {
             order: {
                 id: 0,
-                purchasedAt: '',
+                operationDate: '',
                 total: 0.0,
                 itemsCount: 0,
                 currency: '',

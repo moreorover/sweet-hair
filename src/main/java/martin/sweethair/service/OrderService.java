@@ -43,7 +43,7 @@ public class OrderService {
                 .total(orderDtoFull.getTotal())
                 .itemsCount(orderDtoFull.getItemsCount())
                 .currency(orderDtoFull.getCurrency())
-                .purchasedAt(orderDtoFull.getPurchasedAt())
+                .operationDate(orderDtoFull.getOperationDate())
                 .build();
         orderRepository.save(modelMapper.map(newOrder, Order.class));
 
@@ -139,8 +139,8 @@ public class OrderService {
             order.setSupplier(supplier);
         }
 
-        if (order.getPurchasedAt() != orderDto.getPurchasedAt()) {
-            order.setPurchasedAt(orderDto.getPurchasedAt());
+        if (order.getOperationDate() != orderDto.getOperationDate()) {
+            order.setOperationDate(orderDto.getOperationDate());
         }
 
         this.updateOrderTotals(order, orderDto.getItemsCount(), orderDto.getTotal());

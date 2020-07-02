@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class SaleDtoBase {
 
     private Long id;
-    private LocalDate soldAt;
+    private LocalDate operationDate;
     private double total;
     private int itemsCount;
     private String currency;

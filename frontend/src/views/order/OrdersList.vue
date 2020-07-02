@@ -42,7 +42,7 @@
         },
         computed: {
             ordersSorted() {
-                return _.orderBy(this.orders, 'purchasedAt', 'desc')
+                return _.orderBy(this.orders, 'operationDate', 'desc')
             }
         }
     }

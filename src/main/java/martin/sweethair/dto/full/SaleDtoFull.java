@@ -15,7 +15,7 @@ import java.util.Set;
 public class SaleDtoFull {
 
     private Long id;
-    private LocalDate soldAt;
+    private LocalDate operationDate;
     private double total;
     private int itemsCount;
     private String currency;

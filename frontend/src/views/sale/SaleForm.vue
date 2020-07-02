@@ -27,7 +27,7 @@
                     <v-row>
                         <v-col cols="12" md="4">
                             <v-row justify="center">
-                                <v-date-picker v-model="localSale.soldAt"
+                                <v-date-picker v-model="localSale.operationDate"
                                                :rules="formRules.dateRules"></v-date-picker>
                             </v-row>
                         </v-col>
@@ -155,7 +155,7 @@
                 },
                 localSale: null,
                 defaultSale: {
-                    soldAt: new Date().toISOString().substr(0, 10),
+                    operationDate: new Date().toISOString().substr(0, 10),
                     total: 0.0,
                     itemsCount: 0,
                     currency: '',

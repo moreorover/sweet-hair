@@ -15,7 +15,7 @@ import java.util.Set;
 public class OrderDtoFull {
 
     private Long id;
-    private LocalDate purchasedAt;
+    private LocalDate operationDate;
     private double total;
     private int itemsCount;
     private String currency;
