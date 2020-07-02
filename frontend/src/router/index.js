@@ -8,6 +8,7 @@ import supplierRoutes from "./supplierRoutes";
 import productRoutes from "./productRoutes";
 import orderRoutes from "./orderRoutes";
 import saleRoutes from "./saleRoutes";
+import dashboardRoutes from "./dashboardRoutes";
 
 Vue.use(VueRouter)
 
@@ -30,6 +31,7 @@ Vue.use(VueRouter)
 const routes = baseRoutes
     .concat(
         customerRoutes,
+        dashboardRoutes,
         orderRoutes,
         productRoutes,
         saleRoutes,
