@@ -61,6 +61,14 @@
             <v-list-item-title>Customers</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        <v-list-item link to="/dashboard">
+          <v-list-item-action>
+            <v-icon></v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Dashboard</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
