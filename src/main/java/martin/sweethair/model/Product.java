@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -22,12 +23,19 @@ public class Product {
     private int inStockCount;
     private int size;
     private String sizeUnit;
+    private double price;
+    private double totalSpent;
+    private double totalReceived;
+    private double profit;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<OrderProducts> orders;
 
     @OneToMany(mappedBy = "sale", fetch = FetchType.LAZY)
     private List<SaleProducts> sales;
+
+    @ManyToMany(mappedBy = "products")
+    private List<Operation> operations = new ArrayList<>();
 
     public void stockCountChangedFromOrder(int oldOrderProductQuantity, int newOrderProductQuantity) {
         this.inStockCount = this.inStockCount - oldOrderProductQuantity + newOrderProductQuantity;
