@@ -12,7 +12,7 @@ CREATE TABLE `transactions` (
     `operation_type` int NOT NULL
 );
 
-ALTER TABLE `transactions` ADD FOREIGN KEY (`operation_type`) REFERENCES `operation_type` (`id`);
+ALTER TABLE `transactions` ADD FOREIGN KEY (`operation_type`) REFERENCES `transaction_type` (`id`);
 ALTER TABLE `transactions` ADD FOREIGN KEY (`operation`) REFERENCES `operations` (`id`);
 
 INSERT INTO `transaction_type` (id, name) VALUES
