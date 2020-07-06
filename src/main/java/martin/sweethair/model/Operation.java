@@ -42,4 +42,7 @@ public class Operation {
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "operation")
+    private List<Transaction> transactions;
 }
