@@ -7,10 +7,6 @@ import martin.sweethair.dto.base.ClientDtoBase;
 import martin.sweethair.dto.base.OperationTypeDtoBase;
 import martin.sweethair.dto.base.ProductDtoBase;
 import martin.sweethair.dto.base.TransactionDtoBase;
-import martin.sweethair.model.Client;
-import martin.sweethair.model.OperationType;
-import martin.sweethair.model.Product;
-import martin.sweethair.model.Transaction;
 
 import java.time.LocalDate;
 import java.util.List;

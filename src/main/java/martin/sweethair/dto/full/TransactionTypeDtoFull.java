@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import martin.sweethair.dto.base.OperationDtoBase;
 import martin.sweethair.dto.base.TransactionTypeDtoBase;
-import martin.sweethair.model.Operation;
-import martin.sweethair.model.TransactionType;
 
 @Data
 @AllArgsConstructor

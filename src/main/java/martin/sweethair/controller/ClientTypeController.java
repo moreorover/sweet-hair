@@ -3,8 +3,6 @@ package martin.sweethair.controller;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import martin.sweethair.dto.base.ClientTypeDtoBase;
-import martin.sweethair.dto.base.ProductDtoBase;
-import martin.sweethair.model.ClientType;
 import martin.sweethair.service.ClientTypeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

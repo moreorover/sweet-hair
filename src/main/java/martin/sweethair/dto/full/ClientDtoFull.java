@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import martin.sweethair.dto.base.ClientTypeDtoBase;
 import martin.sweethair.dto.base.OperationDtoBase;
-import martin.sweethair.model.ClientType;
-import martin.sweethair.model.Operation;
 
 import java.util.List;
 
