@@ -14,4 +14,8 @@ public class ProductDtoBase {
     private int inStockCount;
     private int size;
     private String sizeUnit;
+    private double price;
+    private double totalSpent;
+    private double totalReceived;
+    private double profit;
 }
