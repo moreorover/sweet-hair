@@ -34,7 +34,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductDtoBase> getProductById(@PathVariable("id") Long id) {
-        ProductDtoBase productDtoBase = productService.getProductById(id);
+        ProductDtoBase productDtoBase = productService.getById(id);
         return new ResponseEntity<>(productDtoBase, HttpStatus.OK);
     }
 
@@ -44,13 +44,15 @@ public class ProductController {
             // if different
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        ProductDtoBase updatedProduct = productService.updateProduct(productDtoBase);
+        ProductDtoBase updatedProduct = productService.update(productDtoBase);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
-        productService.deleteProductById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (productService.deleteById(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

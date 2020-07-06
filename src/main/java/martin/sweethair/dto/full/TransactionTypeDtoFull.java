@@ -9,7 +9,7 @@ import martin.sweethair.dto.base.TransactionTypeDtoBase;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionTypeDtoFull {
+public class TransactionTypeDtoFull implements DtoFull {
 
     private Long id;
     private String name;

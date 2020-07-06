@@ -16,17 +16,17 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class ProductService {
+public class ProductService implements ControllerService<ProductDtoBase> {
 
     private final ModelMapper modelMapper;
 
     private final ProductRepository productRepository;
 
     @Transactional
-    public ProductDtoBase save(ProductDtoBase productDtoBase) {
-        Product save = productRepository.save(modelMapper.map(productDtoBase, Product.class));
-        productDtoBase.setId(save.getId());
-        return productDtoBase;
+    public ProductDtoBase save(ProductDtoBase dtoBase) {
+        Product save = productRepository.save(modelMapper.map(dtoBase, Product.class));
+        dtoBase.setId(save.getId());
+        return dtoBase;
     }
 
     @Transactional(readOnly = true)
@@ -37,25 +37,36 @@ public class ProductService {
                 .collect(Collectors.toSet());
     }
 
-    public ProductDtoBase getProductById(Long id) {
+    public ProductDtoBase getById(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new SpringDataException("No product found with ID -> " + id));
         return modelMapper.map(product, ProductDtoBase.class);
     }
 
-    public ProductDtoBase updateProduct(ProductDtoBase productDtoBase) {
-        Product product = productRepository.findById(productDtoBase.getId())
-                .orElseThrow(() -> new SpringDataException("No product found with ID -> " + productDtoBase.getId()));
+    public ProductDtoBase update(ProductDtoBase dtoBase) {
+        Product product = productRepository.findById(dtoBase.getId())
+                .orElseThrow(() -> new SpringDataException("No product found with ID -> " + dtoBase.getId()));
 
-        product.setName(productDtoBase.getName());
-        product.setInStockCount(productDtoBase.getInStockCount());
-        product.setSize(productDtoBase.getSize());
-        product.setSizeUnit(productDtoBase.getSizeUnit());
+        product.setName(dtoBase.getName());
+        product.setInStockCount(dtoBase.getInStockCount());
+        product.setSize(dtoBase.getSize());
+        product.setSizeUnit(dtoBase.getSizeUnit());
         productRepository.save(product);
         return modelMapper.map(product, ProductDtoBase.class);
     }
 
-    public void deleteProductById(Long id) {
-        productRepository.deleteById(id);
+    public boolean deleteById(Long id) {
+        Product product = this.getEntityById(id);
+
+        if (product.getOperations().isEmpty()){
+            productRepository.delete(product);
+            return true;
+        }
+        return false;
+    }
+
+    private Product getEntityById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new SpringDataException("No product found with ID -> " + id));
     }
 }

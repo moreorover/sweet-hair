@@ -16,20 +16,22 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class ClientTypeService {
+public class ClientTypeService implements ControllerService<ClientTypeDtoBase> {
 
     private final ModelMapper modelMapper;
 
     private final ClientTypeRepository clientTypeRepository;
 
     @Transactional
-    public ClientTypeDtoBase save(ClientTypeDtoBase clientTypeDtoBase) {
-        ClientType saved = clientTypeRepository.save(modelMapper.map(clientTypeDtoBase, ClientType.class));
-        clientTypeDtoBase.setId(saved.getId());
-        return clientTypeDtoBase;
+    @Override
+    public ClientTypeDtoBase save(ClientTypeDtoBase dtoBase) {
+        ClientType saved = clientTypeRepository.save(modelMapper.map(dtoBase, ClientType.class));
+        dtoBase.setId(saved.getId());
+        return dtoBase;
     }
 
     @Transactional(readOnly = true)
+    @Override
     public Set<ClientTypeDtoBase> getAll() {
         return clientTypeRepository.findAll()
                 .stream()
@@ -37,6 +39,7 @@ public class ClientTypeService {
                 .collect(Collectors.toSet());
     }
 
+    @Override
     public ClientTypeDtoBase getById(Long id) {
         ClientType clientType = this.getEntityById(id);
         return modelMapper.map(clientType, ClientTypeDtoBase.class);
@@ -55,19 +58,21 @@ public class ClientTypeService {
         return modelMapper.map(clientType, ClientTypeDtoBase.class);
     }
 
-    public ClientTypeDtoBase update(ClientTypeDtoBase clientDtoBase) {
-        ClientType clientType = this.getEntityById(clientDtoBase.getId());
+    @Override
+    public ClientTypeDtoBase update(ClientTypeDtoBase dtoBase) {
+        ClientType clientType = this.getEntityById(dtoBase.getId());
 
-        if (clientType.getId().equals(clientDtoBase.getId())) {
-            if (!clientType.equals(modelMapper.map(clientDtoBase, ClientType.class))) {
-                clientType.setName(clientDtoBase.getName());
+        if (clientType.getId().equals(dtoBase.getId())) {
+            if (!clientType.equals(modelMapper.map(dtoBase, ClientType.class))) {
+                clientType.setName(dtoBase.getName());
                 clientTypeRepository.save(clientType);
             }
         }
         return modelMapper.map(clientType, ClientTypeDtoBase.class);
     }
 
-    public boolean delete(Long id) {
+    @Override
+    public boolean deleteById(Long id) {
         ClientType clientType = this.getEntityById(id);
 
         if (clientType.getClients().isEmpty()) {

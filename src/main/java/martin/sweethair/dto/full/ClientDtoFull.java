@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientDtoFull {
+public class ClientDtoFull implements DtoFull {
 
     private Long id;
     private String name;

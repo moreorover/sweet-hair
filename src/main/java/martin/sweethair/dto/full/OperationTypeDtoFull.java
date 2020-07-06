@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OperationTypeDtoFull {
+public class OperationTypeDtoFull implements DtoFull {
 
     private Long id;
     private String name;

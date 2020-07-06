@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionDtoFull {
+public class TransactionDtoFull implements DtoFull {
 
     private Long id;
     private boolean paid;

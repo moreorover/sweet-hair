@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OperationDtoBase {
+public class OperationDtoBase implements DtoBase {
 
     private Long id;
     private LocalDate date;

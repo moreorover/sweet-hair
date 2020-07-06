@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OperationDtoFull {
+public class OperationDtoFull implements DtoFull {
 
     private Long id;
     private LocalDate date;

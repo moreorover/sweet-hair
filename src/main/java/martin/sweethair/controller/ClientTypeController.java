@@ -50,7 +50,7 @@ public class ClientTypeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
-        if (clientTypeService.delete(id)) {
+        if (clientTypeService.deleteById(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

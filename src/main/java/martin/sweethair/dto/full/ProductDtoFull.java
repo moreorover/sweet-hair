@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDtoFull {
+public class ProductDtoFull implements DtoFull {
 
     private Long id;
     private String name;
