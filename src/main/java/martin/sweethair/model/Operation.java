@@ -44,5 +44,5 @@ public class Operation {
     private List<Product> products = new ArrayList<>();
 
     @OneToMany(mappedBy = "operation")
-    private List<Transaction> transactions;
+    private List<Transaction> transactions = new ArrayList<>();
 }

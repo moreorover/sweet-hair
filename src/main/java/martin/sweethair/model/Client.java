@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -25,5 +26,5 @@ public class Client {
     private ClientType clientType;
 
     @OneToMany(mappedBy = "client")
-    private List<Operation> operations;
+    private List<Operation> operations = new ArrayList<>();
 }

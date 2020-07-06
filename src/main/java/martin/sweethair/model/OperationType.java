@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,5 +22,5 @@ public class OperationType {
     private String name;
 
     @OneToMany(mappedBy = "operationType")
-    private List<Operation> operations;
+    private List<Operation> operations = new ArrayList<>();
 }
