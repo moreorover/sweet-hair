@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -21,6 +22,7 @@ public class Transaction {
     private boolean paid;
     private double amount;
     private String note;
+    private LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "transaction_type", nullable = false)

@@ -8,6 +8,8 @@ import martin.sweethair.dto.base.TransactionTypeDtoBase;
 import martin.sweethair.model.Operation;
 import martin.sweethair.model.TransactionType;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +19,7 @@ public class TransactionDtoFull {
     private boolean paid;
     private double amount;
     private String note;
+    private LocalDate date;
 
     private TransactionTypeDtoBase transactionType;
     private OperationDtoBase operation;
