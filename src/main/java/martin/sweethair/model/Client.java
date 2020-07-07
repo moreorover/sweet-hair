@@ -1,13 +1,16 @@
 package martin.sweethair.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,4 +30,19 @@ public class Client {
 
     @OneToMany(mappedBy = "client")
     private List<Operation> operations = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Client client = (Client) o;
+        return id.equals(client.id) &&
+                name.equals(client.name) &&
+                clientType.equals(client.clientType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, clientType);
+    }
 }

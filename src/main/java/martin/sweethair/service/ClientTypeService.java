@@ -10,57 +10,47 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 @Slf4j
-public class ClientTypeService implements ControllerService<ClientTypeDtoBase> {
+public class ClientTypeService {
 
     private final ModelMapper modelMapper;
 
     private final ClientTypeRepository clientTypeRepository;
 
     @Transactional
-    @Override
-    public ClientTypeDtoBase save(ClientTypeDtoBase dtoBase) {
-        ClientType saved = clientTypeRepository.save(modelMapper.map(dtoBase, ClientType.class));
-        dtoBase.setId(saved.getId());
-        return dtoBase;
+    public ClientType save(ClientTypeDtoBase dtoBase) {
+        ClientType newClientType = ClientType.builder()
+                .name(dtoBase.getName())
+                .build();
+
+        return clientTypeRepository.save(newClientType);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Set<ClientTypeDtoBase> getAll() {
-        return clientTypeRepository.findAll()
-                .stream()
-                .map(clientType -> modelMapper.map(clientType, ClientTypeDtoBase.class))
-                .collect(Collectors.toSet());
+    @Transactional
+    public Set<ClientType> getAll() {
+        return new HashSet<>(clientTypeRepository.findAll());
     }
 
-    @Override
-    public ClientTypeDtoBase getById(Long id) {
-        ClientType clientType = this.getEntityById(id);
-        return modelMapper.map(clientType, ClientTypeDtoBase.class);
-    }
-
-    public ClientType getEntityById(Long id) {
+    public ClientType getById(Long id) {
         return clientTypeRepository.findById(id)
                 .orElseThrow(() -> new SpringDataException("No client type found with ID -> " + id));
     }
 
-    public ClientTypeDtoBase getByName(String name) {
+    public ClientType getByName(String name) {
         ClientType clientType = clientTypeRepository.findFirstByName(name);
         if (clientType == null) {
             throw new SpringDataException("No client type found with name -> " + name);
         }
-        return modelMapper.map(clientType, ClientTypeDtoBase.class);
+        return clientType;
     }
 
-    @Override
-    public ClientTypeDtoBase update(ClientTypeDtoBase dtoBase) {
-        ClientType clientType = this.getEntityById(dtoBase.getId());
+    public ClientType update(ClientTypeDtoBase dtoBase) {
+        ClientType clientType = this.getById(dtoBase.getId());
 
         if (clientType.getId().equals(dtoBase.getId())) {
             if (!clientType.equals(modelMapper.map(dtoBase, ClientType.class))) {
@@ -68,12 +58,11 @@ public class ClientTypeService implements ControllerService<ClientTypeDtoBase> {
                 clientTypeRepository.save(clientType);
             }
         }
-        return modelMapper.map(clientType, ClientTypeDtoBase.class);
+        return clientType;
     }
 
-    @Override
     public boolean deleteById(Long id) {
-        ClientType clientType = this.getEntityById(id);
+        ClientType clientType = this.getById(id);
 
         if (clientType.getClients().isEmpty()) {
             clientTypeRepository.delete(clientType);
