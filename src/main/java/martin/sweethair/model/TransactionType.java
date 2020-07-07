@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +25,7 @@ public class TransactionType {
     private String name;
 
     @OneToMany(mappedBy = "transactionType")
-    private List<Transaction> transactions;
+    private List<Transaction> transactions = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
