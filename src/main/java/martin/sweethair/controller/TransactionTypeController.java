@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/client_type")
+@RequestMapping("/api/transaction_type")
 @AllArgsConstructor
 @Slf4j
 public class TransactionTypeController {
