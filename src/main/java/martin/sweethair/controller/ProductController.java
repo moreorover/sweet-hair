@@ -2,14 +2,22 @@ package martin.sweethair.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import martin.sweethair.dto.PostClientDto;
+import martin.sweethair.dto.PostProductDto;
 import martin.sweethair.dto.base.ProductDtoBase;
+import martin.sweethair.dto.full.ClientDtoFull;
+import martin.sweethair.dto.full.ProductDtoFull;
+import martin.sweethair.model.Client;
+import martin.sweethair.model.Product;
 import martin.sweethair.service.ProductService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -18,38 +26,46 @@ import java.util.Set;
 @Slf4j
 public class ProductController {
 
+    private final ModelMapper modelMapper;
+
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<ProductDtoBase> createProduct(@RequestBody ProductDtoBase productDtoBase) {
-        ProductDtoBase savedProduct = productService.save(productDtoBase);
-        return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+    public ResponseEntity<ProductDtoFull> create(@RequestBody PostProductDto postProductDto) {
+        Product saved = productService.save(postProductDto);
+        return new ResponseEntity<>(modelMapper.map(saved, ProductDtoFull.class), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Set<ProductDtoBase>> getAllProducts() {
-        Set<ProductDtoBase> productDtos = productService.getAll();
-        return new ResponseEntity<>(productDtos, HttpStatus.OK);
+    public ResponseEntity<Set<ProductDtoFull>> getAll() {
+        Set<Product> products = productService.getAll();
+        Set<ProductDtoFull> productDtoFulls = products.stream()
+                .map(client -> modelMapper.map(client, ProductDtoFull.class))
+                .collect(Collectors.toSet());
+
+        return new ResponseEntity<>(productDtoFulls, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDtoBase> getProductById(@PathVariable("id") Long id) {
-        ProductDtoBase productDtoBase = productService.getById(id);
-        return new ResponseEntity<>(productDtoBase, HttpStatus.OK);
+    public ResponseEntity<ProductDtoFull> getById(@PathVariable("id") Long id) {
+        Product product = productService.getById(id);
+        ProductDtoFull productDtoFull = modelMapper.map(product, ProductDtoFull.class);
+        return new ResponseEntity<>(productDtoFull, HttpStatus.OK);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductDtoBase> updateProduct(@PathVariable("id") Long id, @RequestBody ProductDtoBase productDtoBase) {
+    public ResponseEntity<ProductDtoFull> update(@PathVariable("id") Long id, @RequestBody ProductDtoBase productDtoBase) {
         if (!Objects.equals(id, productDtoBase.getId())){
             // if different
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        ProductDtoBase updatedProduct = productService.update(productDtoBase);
-        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+        Product updatedProduct = productService.update(productDtoBase);
+        ProductDtoFull productDtoFullUpdated = modelMapper.map(updatedProduct, ProductDtoFull.class);
+        return new ResponseEntity<>(productDtoFullUpdated, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         if (productService.deleteById(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
