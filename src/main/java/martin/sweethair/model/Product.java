@@ -45,13 +45,12 @@ public class Product {
                 Double.compare(product.totalSpent, totalSpent) == 0 &&
                 Double.compare(product.totalReceived, totalReceived) == 0 &&
                 Double.compare(product.profit, profit) == 0 &&
-                id.equals(product.id) &&
                 name.equals(product.name) &&
                 sizeUnit.equals(product.sizeUnit);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, inStockCount, size, sizeUnit, price, totalSpent, totalReceived, profit);
+        return Objects.hash(name, inStockCount, size, sizeUnit, price, totalSpent, totalReceived, profit);
     }
 }

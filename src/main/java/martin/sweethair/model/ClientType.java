@@ -32,12 +32,11 @@ public class ClientType {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ClientType that = (ClientType) o;
-        return id.equals(that.id) &&
-                name.equals(that.name);
+        return name.equals(that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(name);
     }
 }

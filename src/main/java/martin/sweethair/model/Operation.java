@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @AllArgsConstructor
@@ -45,4 +46,21 @@ public class Operation {
 
     @OneToMany(mappedBy = "operation")
     private List<Transaction> transactions = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Operation operation = (Operation) o;
+        return date.equals(operation.date) &&
+                total.equals(operation.total) &&
+                profit.equals(operation.profit) &&
+                note.equals(operation.note) &&
+                operationType.equals(operation.operationType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, total, profit, note, operationType);
+    }
 }

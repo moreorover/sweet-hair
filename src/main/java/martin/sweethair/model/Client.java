@@ -36,13 +36,12 @@ public class Client {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
-        return id.equals(client.id) &&
-                name.equals(client.name) &&
+        return name.equals(client.name) &&
                 clientType.equals(client.clientType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, clientType);
+        return Objects.hash(name, clientType);
     }
 }
