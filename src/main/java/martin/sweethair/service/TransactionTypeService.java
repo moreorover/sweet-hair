@@ -33,16 +33,18 @@ public class TransactionTypeService {
         return transactionTypeRepository.save(newTransactionType);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Set<TransactionType> getAll() {
         return new HashSet<>(transactionTypeRepository.findAll());
     }
 
+    @Transactional(readOnly = true)
     public TransactionType getById(Long id) {
         return transactionTypeRepository.findById(id)
                 .orElseThrow(() -> new SpringDataException("No transaction type found with ID -> " + id));
     }
 
+    @Transactional
     public TransactionType getByName(String name) {
         TransactionType transactionType = transactionTypeRepository.findFirstByName(name);
         if (transactionType == null) {
@@ -51,6 +53,7 @@ public class TransactionTypeService {
         return transactionType;
     }
 
+    @Transactional
     public TransactionType update(TransactionTypeDtoBase dtoBase) {
         TransactionType transactionType = this.getById(dtoBase.getId());
 
@@ -63,6 +66,7 @@ public class TransactionTypeService {
         return transactionType;
     }
 
+    @Transactional
     public boolean deleteById(Long id) {
         TransactionType transactionType = this.getById(id);
 

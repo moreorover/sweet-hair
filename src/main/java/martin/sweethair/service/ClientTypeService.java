@@ -31,16 +31,18 @@ public class ClientTypeService {
         return clientTypeRepository.save(newClientType);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Set<ClientType> getAll() {
         return new HashSet<>(clientTypeRepository.findAll());
     }
 
+    @Transactional(readOnly = true)
     public ClientType getById(Long id) {
         return clientTypeRepository.findById(id)
                 .orElseThrow(() -> new SpringDataException("No client type found with ID -> " + id));
     }
 
+    @Transactional(readOnly = true)
     public ClientType getByName(String name) {
         ClientType clientType = clientTypeRepository.findFirstByName(name);
         if (clientType == null) {
@@ -49,6 +51,7 @@ public class ClientTypeService {
         return clientType;
     }
 
+    @Transactional
     public ClientType update(ClientTypeDtoBase dtoBase) {
         ClientType clientType = this.getById(dtoBase.getId());
 
@@ -61,6 +64,7 @@ public class ClientTypeService {
         return clientType;
     }
 
+    @Transactional
     public boolean deleteById(Long id) {
         ClientType clientType = this.getById(id);
 

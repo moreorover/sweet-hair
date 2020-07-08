@@ -47,11 +47,13 @@ public class ProductService {
         return new HashSet<>(productRepository.findAll());
     }
 
+    @Transactional(readOnly = true)
     public Product getById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new SpringDataException("No product found with ID -> " + id));
     }
 
+    @Transactional
     public Product update(ProductDtoBase dtoBase) {
         Product product = this.getById(dtoBase.getId());
 
@@ -71,6 +73,7 @@ public class ProductService {
         return product;
     }
 
+    @Transactional
     public boolean deleteById(Long id) {
         Product product = this.getById(id);
 

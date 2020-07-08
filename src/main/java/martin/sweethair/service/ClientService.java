@@ -40,11 +40,13 @@ public class ClientService {
         return new HashSet<>(clientRepository.findAll());
     }
 
+    @Transactional(readOnly = true)
     public Client getById(Long id) {
         return clientRepository.findById(id)
                 .orElseThrow(() -> new SpringDataException("No client found with ID -> " + id));
     }
 
+    @Transactional
     public Client update(ClientDtoFull dtoFull) {
         ClientType clientType = this.clientTypeService.getByName(dtoFull.getClientType().getName());
         Client client = this.getById(dtoFull.getId());
@@ -59,6 +61,7 @@ public class ClientService {
         return client;
     }
 
+    @Transactional
     public boolean deleteById(Long id) {
         Client client = this.getById(id);
 
