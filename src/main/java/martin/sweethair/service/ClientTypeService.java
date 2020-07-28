@@ -2,6 +2,8 @@ package martin.sweethair.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import martin.sweethair.dto.PostClientDto;
+import martin.sweethair.dto.PostClientTypeDto;
 import martin.sweethair.dto.base.ClientTypeDtoBase;
 import martin.sweethair.exceptions.SpringDataException;
 import martin.sweethair.model.ClientType;
@@ -23,7 +25,7 @@ public class ClientTypeService {
     private final ClientTypeRepository clientTypeRepository;
 
     @Transactional
-    public ClientType save(ClientTypeDtoBase dtoBase) {
+    public ClientType save(PostClientTypeDto dtoBase) {
         ClientType newClientType = ClientType.builder()
                 .name(dtoBase.getName())
                 .build();

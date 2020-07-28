@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OperationTypeRepository extends JpaRepository<OperationType, Long> {
+
+    OperationType findFirstByName(String name);
 }

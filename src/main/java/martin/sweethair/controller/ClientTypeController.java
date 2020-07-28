@@ -2,6 +2,8 @@ package martin.sweethair.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import martin.sweethair.dto.PostClientDto;
+import martin.sweethair.dto.PostClientTypeDto;
 import martin.sweethair.dto.base.ClientTypeDtoBase;
 import martin.sweethair.dto.full.ClientTypeDtoFull;
 import martin.sweethair.model.ClientType;
@@ -27,7 +29,7 @@ public class ClientTypeController {
     private final ClientTypeService clientTypeService;
 
     @PostMapping
-    public ResponseEntity<ClientTypeDtoBase> create(@RequestBody ClientTypeDtoBase clientTypeDtoBase) {
+    public ResponseEntity<ClientTypeDtoBase> create(@RequestBody PostClientTypeDto clientTypeDtoBase) {
         ClientType saved = clientTypeService.save(clientTypeDtoBase);
         ClientTypeDtoBase savedClientType = modelMapper.map(saved, ClientTypeDtoBase.class);
         return new ResponseEntity<>(savedClientType, HttpStatus.CREATED);

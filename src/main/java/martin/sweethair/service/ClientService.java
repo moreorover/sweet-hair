@@ -46,6 +46,11 @@ public class ClientService {
                 .orElseThrow(() -> new SpringDataException("No client found with ID -> " + id));
     }
 
+    @Transactional(readOnly = true)
+    public Client getByName(String name) {
+        return clientRepository.findFirstByName(name);
+    }
+
     @Transactional
     public Client update(ClientDtoFull dtoFull) {
         ClientType clientType = this.clientTypeService.getByName(dtoFull.getClientType().getName());
